@@ -726,15 +726,15 @@ st.set_page_config(page_title="ALTIUS COBAY - Consultoría", page_icon="🎓", l
 
 st.title("🎓 ALTIUS COBAY")
 st.subheader("Consultoría Inteligente")
-st.markdown("**Fortaleciendo el ecosistema educativo del COBAY con AllenAI Molmo**")
+st.markdown("**Fortaleciendo el ecosistema educativo del COBAY con AllenAI Molmo 2**")
 st.markdown("---")
 
 # --- CONFIGURACIÓN SEGURA DE API KEY ---
 BASE_URL = "https://openrouter.ai/api/v1"
 
-# CAMBIO CRÍTICO: ID DE MODELO CORREGIDO PARA EVITAR ERROR 400
-# Se usa la versión 'free' estándar disponible en OpenRouter
-MODEL_NAME = "allenai/molmo-7b:free"
+# === CAMBIO SOLICITADO ===
+# Se utiliza estrictamente el ID de modelo proporcionado
+MODEL_NAME = "allenai/molmo-2-8b:free"
 
 # Recuperación segura de la clave desde st.secrets
 api_key = None
@@ -788,7 +788,6 @@ if prompt := st.chat_input("Consulta a ALTIUS (Ej: ¿Cuántos salones tiene el p
                 messages=messages_api,
                 stream=True,
                 temperature=0.3,
-                # Opcional: Molmo a veces requiere top_p explícito
                 top_p=1.0 
             )
             
