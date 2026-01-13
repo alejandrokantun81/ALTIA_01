@@ -3,7 +3,7 @@ from openai import OpenAI
 import os
 
 # ---------------------------------------------------------
-# 1. BASE DE CONOCIMIENTO MAESTRA DE ALTIA COBAY
+# 1. BASE DE CONOCIMIENTO MAESTRA DE ALTIUS COBAY
 # ---------------------------------------------------------
 DATOS_RAG = [
     # =========================================================================
@@ -690,7 +690,7 @@ DATOS_RAG = [
 # 2. CONFIGURACIÓN DEL SISTEMA
 # ---------------------------------------------------------
 def generar_contexto_sistema(datos):
-    contexto = "ERES ALTIA COBAY, UN SISTEMA DE CONSULTORÍA INTELIGENTE PARA EL COLEGIO DE BACHILLERES DEL ESTADO DE YUCATÁN.\n"
+    contexto = "ERES ALTIUS COBAY, UN SISTEMA DE CONSULTORÍA INTELIGENTE PARA EL COLEGIO DE BACHILLERES DEL ESTADO DE YUCATÁN.\n"
     contexto += "Tu misión es fortalecer el ecosistema educativo proporcionando respuestas precisas basadas en la siguiente documentación oficial:\n\n"
     contexto += "1. REGLAMENTO INTERIOR DE TRABAJO (RIT): Obligaciones, disciplina y condiciones laborales.\n"
     contexto += "2. REGLAMENTO ACADÉMICO: Trámites, derechos y obligaciones de alumnos.\n"
@@ -710,10 +710,11 @@ def generar_contexto_sistema(datos):
         contexto += f"{contenido}\n\n"
     
     contexto += "\nINSTRUCCIONES PARA RESPONDER:\n"
-    contexto += "1. IDENTIDAD: Preséntate como 'ALTIA COBAY' si te preguntan quién eres.\n"
+    contexto += "1. IDENTIDAD: Preséntate como 'ALTIUS COBAY' si te preguntan quién eres.\n"
     contexto += "2. CLASIFICACIÓN: Identifica si la consulta es Laboral, Académica, Administrativa, Estadística o de Infraestructura.\n"
     contexto += "3. PRECISIÓN: Usa datos exactos del bloque de Matrícula, Calendario o Infraestructura cuando se requieran cifras o fechas.\n"
     contexto += "4. CITA: Menciona siempre la fuente (ej. 'Según el Inventario de Infraestructura...' o 'Con base en el Reglamento Académico...').\n"
+    contexto += "5. BREVEDAD: Tus respuestas deben ser directas y concisas. No excedas las 150 palabras a menos que sea estrictamente necesario. Prioriza listas y datos duros. Optimiza tu respuesta para que quepa en menos de 200 palabras.\n"
     return contexto
 
 # Generar el prompt del sistema (Asegúrese de que DATOS_RAG tenga el contenido real)
@@ -722,18 +723,17 @@ SYSTEM_PROMPT = generar_contexto_sistema(DATOS_RAG)
 # ---------------------------------------------------------
 # 3. INTERFAZ DE STREAMLIT Y CLIENTE OPENROUTER
 # ---------------------------------------------------------
-st.set_page_config(page_title="ALTIA COBAY - Consultoría", page_icon="🎓", layout="wide")
+st.set_page_config(page_title="ALTIUS COBAY - Consultoría", page_icon="🎓", layout="wide")
 
-st.title("🎓 ALTIA COBAY")
-st.subheader("Intelligent Consulting")
+st.title("🎓 ALTIUS COBAY")
+st.subheader("Consultoría Inteligente")
 st.markdown("**Fortaleciendo el ecosistema educativo del COBAY con Mistral Small**")
 st.markdown("---")
 
 # --- CONFIGURACIÓN SEGURA DE API KEY ---
 BASE_URL = "https://openrouter.ai/api/v1"
 
-# === CAMBIO SOLICITADO: MISTRAL SMALL CREATIVE ===
-# El ID técnico para este modelo en OpenRouter (versión gratuita)
+# === MODELO DE MISTRAL ===
 MODEL_NAME = "mistralai/mistral-small-creative"
 
 # Recuperación segura de la clave desde st.secrets
@@ -782,12 +782,13 @@ if prompt := st.chat_input("Consulta a ALTIUS (Ej: ¿Cuántos salones tiene el p
             for msg in st.session_state.messages:
                 messages_api.append({"role": msg["role"], "content": msg["content"]})
 
-            # Llamada al modelo
+            # Llamada al modelo con LÍMITE DE TOKENS (Cost control)
             stream = client.chat.completions.create(
                 model=MODEL_NAME,
                 messages=messages_api,
                 stream=True,
-                temperature=0.3
+                temperature=0.3,
+                max_tokens=300  # <--- Límite duro para controlar costos
             )
             
             for chunk in stream:
@@ -801,6 +802,3 @@ if prompt := st.chat_input("Consulta a ALTIUS (Ej: ¿Cuántos salones tiene el p
 
         except Exception as e:
             st.error(f"Error técnico en el sistema ALTIUS: {e}")
-
-
-
