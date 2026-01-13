@@ -3,7 +3,7 @@ from openai import OpenAI
 import os
 
 # ---------------------------------------------------------
-# 1. BASE DE CONOCIMIENTO MAESTRA DE ALTIUS COBAY
+# 1. BASE DE CONOCIMIENTO MAESTRA DE ALTIA COBAY
 # ---------------------------------------------------------
 DATOS_RAG = [
     # =========================================================================
@@ -801,5 +801,6 @@ if prompt := st.chat_input("Consulta a ALTIUS (Ej: ¿Cuántos salones tiene el p
 
         except Exception as e:
             st.error(f"Error técnico en el sistema ALTIUS: {e}")
+
 
 
