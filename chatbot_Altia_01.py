@@ -690,7 +690,7 @@ DATOS_RAG = [
 # 2. CONFIGURACIÓN DEL SISTEMA
 # ---------------------------------------------------------
 def generar_contexto_sistema(datos):
-    contexto = "ERES ALTIUS COBAY, UN SISTEMA DE CONSULTORÍA INTELIGENTE PARA EL COLEGIO DE BACHILLERES DEL ESTADO DE YUCATÁN.\n"
+    contexto = "ERES ALTIA COBAY, UN SISTEMA DE CONSULTORÍA INTELIGENTE PARA EL COLEGIO DE BACHILLERES DEL ESTADO DE YUCATÁN.\n"
     contexto += "Tu misión es fortalecer el ecosistema educativo proporcionando respuestas precisas basadas en la siguiente documentación oficial:\n\n"
     contexto += "1. REGLAMENTO INTERIOR DE TRABAJO (RIT): Obligaciones, disciplina y condiciones laborales.\n"
     contexto += "2. REGLAMENTO ACADÉMICO: Trámites, derechos y obligaciones de alumnos.\n"
@@ -710,7 +710,7 @@ def generar_contexto_sistema(datos):
         contexto += f"{contenido}\n\n"
     
     contexto += "\nINSTRUCCIONES PARA RESPONDER:\n"
-    contexto += "1. IDENTIDAD: Preséntate como 'ALTIUS COBAY' si te preguntan quién eres.\n"
+    contexto += "1. IDENTIDAD: Preséntate como 'ALTIA COBAY' si te preguntan quién eres.\n"
     contexto += "2. CLASIFICACIÓN: Identifica si la consulta es Laboral, Académica, Administrativa, Estadística o de Infraestructura.\n"
     contexto += "3. PRECISIÓN: Usa datos exactos del bloque de Matrícula, Calendario o Infraestructura cuando se requieran cifras o fechas.\n"
     contexto += "4. CITA: Menciona siempre la fuente (ej. 'Según el Inventario de Infraestructura...' o 'Con base en el Reglamento Académico...').\n"
@@ -722,10 +722,10 @@ SYSTEM_PROMPT = generar_contexto_sistema(DATOS_RAG)
 # ---------------------------------------------------------
 # 3. INTERFAZ DE STREAMLIT Y CLIENTE OPENROUTER
 # ---------------------------------------------------------
-st.set_page_config(page_title="ALTIUS COBAY - Consultoría", page_icon="🎓", layout="wide")
+st.set_page_config(page_title="ALTIA COBAY - Consultoría", page_icon="🎓", layout="wide")
 
-st.title("🎓 ALTIUS COBAY")
-st.subheader("Consultoría Inteligente")
+st.title("🎓 ALTIA COBAY")
+st.subheader("Intelligent Consulting")
 st.markdown("**Fortaleciendo el ecosistema educativo del COBAY con Mistral Small**")
 st.markdown("---")
 
@@ -801,4 +801,5 @@ if prompt := st.chat_input("Consulta a ALTIUS (Ej: ¿Cuántos salones tiene el p
 
         except Exception as e:
             st.error(f"Error técnico en el sistema ALTIUS: {e}")
+
 
