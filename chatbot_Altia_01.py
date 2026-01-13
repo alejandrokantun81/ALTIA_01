@@ -726,15 +726,15 @@ st.set_page_config(page_title="ALTIUS COBAY - Consultoría", page_icon="🎓", l
 
 st.title("🎓 ALTIUS COBAY")
 st.subheader("Consultoría Inteligente")
-st.markdown("**Fortaleciendo el ecosistema educativo del COBAY con AllenAI Molmo 2**")
+st.markdown("**Fortaleciendo el ecosistema educativo del COBAY con Mistral Small**")
 st.markdown("---")
 
 # --- CONFIGURACIÓN SEGURA DE API KEY ---
 BASE_URL = "https://openrouter.ai/api/v1"
 
-# === CAMBIO SOLICITADO ===
-# Se utiliza estrictamente el ID de modelo proporcionado
-MODEL_NAME = "allenai/molmo-2-8b:free"
+# === CAMBIO SOLICITADO: MISTRAL SMALL CREATIVE ===
+# El ID técnico para este modelo en OpenRouter (versión gratuita)
+MODEL_NAME = "mistralai/mistral-small-24b-instruct-2501:free"
 
 # Recuperación segura de la clave desde st.secrets
 api_key = None
@@ -787,8 +787,7 @@ if prompt := st.chat_input("Consulta a ALTIUS (Ej: ¿Cuántos salones tiene el p
                 model=MODEL_NAME,
                 messages=messages_api,
                 stream=True,
-                temperature=0.3,
-                top_p=1.0 
+                temperature=0.3
             )
             
             for chunk in stream:
