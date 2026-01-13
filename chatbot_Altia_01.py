@@ -734,7 +734,7 @@ BASE_URL = "https://openrouter.ai/api/v1"
 
 # === CAMBIO SOLICITADO: MISTRAL SMALL CREATIVE ===
 # El ID técnico para este modelo en OpenRouter (versión gratuita)
-MODEL_NAME = "mistralai/mistral-small-24b-instruct-2501:free"
+MODEL_NAME = "mistralai/mistral-small-creative"
 
 # Recuperación segura de la clave desde st.secrets
 api_key = None
@@ -801,3 +801,4 @@ if prompt := st.chat_input("Consulta a ALTIUS (Ej: ¿Cuántos salones tiene el p
 
         except Exception as e:
             st.error(f"Error técnico en el sistema ALTIUS: {e}")
+
