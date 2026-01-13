@@ -3,7 +3,134 @@ from openai import OpenAI
 import os
 
 # ---------------------------------------------------------
-# 1. BASE DE CONOCIMIENTO MAESTRA DE ALTIUS COBAY
+# 1. CONFIGURACIÓN DE PÁGINA
+# ---------------------------------------------------------
+st.set_page_config(page_title="ALTIUS COBAY", page_icon="🎓", layout="wide")
+
+# ---------------------------------------------------------
+# 2. ESTILOS CSS (FRONTEND WHATSAPP - PALETA INSTITUCIONAL)
+# ---------------------------------------------------------
+st.markdown("""
+<style>
+    /* 1. Fondo general de la aplicación: NEGRO (Grafito Oscuro con Textura) */
+    .stApp {
+        background-color: #121212;
+        background-image: linear-gradient(30deg, #1a1a1a 12%, transparent 12.5%, transparent 87%, #1a1a1a 87.5%, #1a1a1a),
+        linear-gradient(150deg, #1a1a1a 12%, transparent 12.5%, transparent 87%, #1a1a1a 87.5%, #1a1a1a),
+        linear-gradient(30deg, #1a1a1a 12%, transparent 12.5%, transparent 87%, #1a1a1a 87.5%, #1a1a1a),
+        linear-gradient(150deg, #1a1a1a 12%, transparent 12.5%, transparent 87%, #1a1a1a 87.5%, #1a1a1a),
+        linear-gradient(60deg, #222222 25%, transparent 25.5%, transparent 75%, #222222 75%, #222222),
+        linear-gradient(60deg, #222222 25%, transparent 25.5%, transparent 75%, #222222 75%, #222222);
+        background-size: 80px 140px;
+        background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;
+    }
+
+    /* 2. Ocultar elementos nativos de Streamlit */
+    header {visibility: hidden;}
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+
+    /* 3. Encabezado Personalizado: GUINDA */
+    .whatsapp-header {
+        background-color: #8A1538; /* Guinda Institucional */
+        padding: 15px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 999;
+        display: flex;
+        align-items: center;
+        color: white;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        border-bottom: 2px solid #FFD700; /* Línea sutil amarilla */
+    }
+    .whatsapp-header img {
+        border-radius: 50%;
+        width: 45px;
+        height: 45px;
+        margin-left: 20px;
+        margin-right: 15px;
+        border: 2px solid white;
+    }
+    .whatsapp-header h1 {
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 22px;
+        margin: 0;
+        color: #FFFFFF; /* Texto Blanco */
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+    .whatsapp-header .status {
+        font-size: 12px; 
+        color: #FFEB3B; /* Texto Amarillo Canario para el estado */
+    }
+    
+    /* Ajuste del contenedor principal */
+    .block-container {
+        padding-top: 90px !important;
+        padding-bottom: 120px !important;
+    }
+
+    /* 4. Estructura de Mensajes */
+    .chat-row {
+        display: flex;
+        margin-bottom: 15px;
+        width: 100%;
+    }
+    
+    .user-row {
+        justify-content: flex-end; 
+    }
+    
+    .bot-row {
+        justify-content: flex-start; 
+    }
+
+    .chat-bubble {
+        padding: 12px 18px;
+        border-radius: 12px;
+        max-width: 75%;
+        font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+        font-size: 16px;
+        line-height: 1.5;
+        position: relative;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    }
+
+    /* Burbuja del Usuario: AMARILLO CANARIO */
+    .user-bubble {
+        background-color: #FFEB3B; /* Amarillo Canario Intenso */
+        color: #000000; /* Texto Negro para contraste */
+        border-top-right-radius: 0;
+        border: 1px solid #FBC02D;
+    }
+
+    /* Burbuja del Bot: BLANCO */
+    .bot-bubble {
+        background-color: #FFFFFF; /* Blanco Puro */
+        color: #000000; /* Texto Negro */
+        border-top-left-radius: 0;
+        border: 1px solid #E0E0E0;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+# ---------------------------------------------------------
+# 3. HEADER VISUAL (HTML)
+# ---------------------------------------------------------
+st.markdown("""
+<div class="whatsapp-header">
+    <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png" alt="Profile">
+    <div>
+        <h1>ALTIUS COBAY</h1>
+        <div class="status">● En línea | Consultoría Inteligente</div>
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
+# ---------------------------------------------------------
+# 4. BASE DE CONOCIMIENTO MAESTRA DE ALTIUS COBAY (COMPLETA)
 # ---------------------------------------------------------
 DATOS_RAG = [
     # =========================================================================
@@ -119,7 +246,6 @@ DATOS_RAG = [
         "metadata": { "sección": "Cap XVIII, XIX y Transitorios", "tipo_documento": "Reglamento Interior de Trabajo" },
         "contenido": "Art 88: Incompatibilidad de dos plazas. Vigencia desde 24 abril 2014."
     },
-
     # =========================================================================
     # BLOQUE 2: REGLAMENTO ACADÉMICO
     # =========================================================================
@@ -203,7 +329,6 @@ DATOS_RAG = [
         "metadata": { "tipo_documento": "Reglamento Académico", "sección": "Título II Cap IX y Transitorios: Sanciones (Arts. 80-82)" },
         "contenido": "Art 80 Sanciones: Amonestación, Suspensión (max 3 días), Baja temporal, Baja definitiva. Art 82: Baja definitiva por indisciplina grave requiere dictamen Dir. Académica. Vigencia desde 2017."
     },
-
     # =========================================================================
     # BLOQUE 3: CONTRATO COLECTIVO DE TRABAJO
     # =========================================================================
@@ -297,7 +422,6 @@ DATOS_RAG = [
         "metadata": { "sección": "Días Personales y Tabulador (Clausulas 91-Final)", "tipo_documento": "Contrato Colectivo de Trabajo" },
         "contenido": "Cláusula 91 Uniformes. Cláusula 92-95 Descansos: Cumpleaños, Día Madre/Padre, Luto (3 días directo, 2 indirecto). Anexo Tabulador: Técnico ($7.5k-11k), Vigilante ($8.4k), Profesor CB I ($435/hr)."
     },
-
     # =========================================================================
     # BLOQUE 4: DIRECTORIO INSTITUCIONAL
     # =========================================================================
@@ -306,24 +430,24 @@ DATOS_RAG = [
         "metadata": { "sección": "Dirección General y Staff", "tipo_documento": "Directorio Institucional" },
         "contenido": """
         DIRECTORIO DE AUTORIDADES DEL COBAY:
-         
+          
         1. DIRECCIÓN GENERAL
            - Titular: Mtro. Didier Manuel De Jesús Barrera Novelo (Director General).
            - Dirección: Calle 34 núm. 420-B x 35, Col. López Mateos, Mérida.
            - Teléfono: (999) 611 8690 Ext. 28051 y 28052.
-         
+          
         2. UNIDAD DE VINCULACIÓN
            - Titular: Ing. Manuel Alberto Bonilla Campo (Jefe de Unidad).
            - Teléfono: Ext. 28091.
-         
+          
         3. COMUNICACIÓN SOCIAL
            - Titular: Lic. Martín Rodrigo Kauil Conde (Jefe de Departamento).
            - Teléfono: Ext. 28007.
-         
+          
         4. RELACIONES PÚBLICAS
            - Titular: Lic. Oswaldo Cardeña Medina (Jefe de Departamento).
            - Teléfono: Ext. 28007.
-         
+          
         5. DIRECCIÓN JURÍDICA
            - Titular: Mtro. David Alejandro Patrón Bianchi (Director Jurídico).
            - Teléfono: Ext. 28044 y 28045.
@@ -376,7 +500,6 @@ DATOS_RAG = [
            - Coordinación EMSAD: Laet. Minelia Soberanis Herrera. Tel: Ext. 28039.
         """
     },
-
     # =========================================================================
     # BLOQUE 5: CALENDARIO ESCOLAR
     # =========================================================================
@@ -466,7 +589,6 @@ DATOS_RAG = [
         - 06/Ago: Reinscripción Repetidores 1º Sem.
         """
     },
-
     # =========================================================================
     # BLOQUE 6: PLANTELES Y MATRÍCULA 2025-B
     # =========================================================================
@@ -587,7 +709,6 @@ DATOS_RAG = [
         11. XCAN: 203 alumnos (1º:75, 3º:67, 5º:61).
         """
     },
-
     # =========================================================================
     # BLOQUE 7: INFRAESTRUCTURA (Inventario de Salones y Turnos)
     # =========================================================================
@@ -687,7 +808,7 @@ DATOS_RAG = [
 ]
 
 # ---------------------------------------------------------
-# 2. CONFIGURACIÓN DEL SISTEMA
+# 5. GENERACIÓN DE CONTEXTO (SYSTEM PROMPT)
 # ---------------------------------------------------------
 def generar_contexto_sistema(datos):
     contexto = "ERES ALTIUS COBAY, UN SISTEMA DE CONSULTORÍA INTELIGENTE PARA EL COLEGIO DE BACHILLERES DEL ESTADO DE YUCATÁN.\n"
@@ -714,36 +835,23 @@ def generar_contexto_sistema(datos):
     contexto += "2. CLASIFICACIÓN: Identifica si la consulta es Laboral, Académica, Administrativa, Estadística o de Infraestructura.\n"
     contexto += "3. PRECISIÓN: Usa datos exactos del bloque de Matrícula, Calendario o Infraestructura cuando se requieran cifras o fechas.\n"
     contexto += "4. CITA: Menciona siempre la fuente (ej. 'Según el Inventario de Infraestructura...' o 'Con base en el Reglamento Académico...').\n"
-    contexto += "5. BREVEDAD: Tus respuestas deben ser directas y concisas. No excedas las 150 palabras a menos que sea estrictamente necesario. Prioriza listas y datos duros. Optimiza tu respuesta para que quepa en menos de 200 palabras.\n"
+    contexto += "5. BREVEDAD: Tus respuestas deben ser directas y concisas. No excedas las 150 palabras a menos que sea estrictamente necesario. Prioriza listas y datos duros.\n"
     return contexto
 
-# Generar el prompt del sistema (Asegúrese de que DATOS_RAG tenga el contenido real)
 SYSTEM_PROMPT = generar_contexto_sistema(DATOS_RAG)
 
 # ---------------------------------------------------------
-# 3. INTERFAZ DE STREAMLIT Y CLIENTE OPENROUTER
+# 6. CONFIGURACIÓN CLIENTE API (OPENROUTER)
 # ---------------------------------------------------------
-st.set_page_config(page_title="ALTIUS COBAY - Consultoría", page_icon="🎓", layout="wide")
-
-st.title("🎓 ALTIUS COBAY")
-st.subheader("Consultoría Inteligente")
-st.markdown("**Fortaleciendo el ecosistema educativo del COBAY con Mistral Small**")
-st.markdown("---")
-
-# --- CONFIGURACIÓN SEGURA DE API KEY ---
 BASE_URL = "https://openrouter.ai/api/v1"
-
-# === MODELO DE MISTRAL ===
 MODEL_NAME = "mistralai/mistral-small-creative"
 
-# Recuperación segura de la clave desde st.secrets
 api_key = None
 try:
     api_key = st.secrets["OPENROUTER_API_KEY"]
 except (FileNotFoundError, KeyError):
     pass
 
-# Inicialización del cliente
 client = None
 if api_key:
     try:
@@ -755,50 +863,93 @@ if api_key:
         st.error(f"Error al iniciar el cliente: {e}")
 else:
     st.warning("⚠️ La API Key no está configurada. Por favor, añada 'OPENROUTER_API_KEY' en los 'Secrets' de Streamlit Cloud.")
-    st.stop()
 
-# --- HISTORIAL Y CHAT ---
+# ---------------------------------------------------------
+# 7. RENDERIZADO DEL CHAT
+# ---------------------------------------------------------
 if "messages" not in st.session_state:
-    st.session_state.messages = []
+    st.session_state.messages = [{
+        "role": "assistant", 
+        "content": "¡Hola! Soy **ALTIUS**. 🎓\nEstoy listo para ayudarte con información sobre reglamentos, calendario escolar, matrícula o infraestructura del COBAY."
+    }]
 
-# Mostrar historial
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"])
+# Bucle para mostrar el historial con el nuevo diseño
+for msg in st.session_state.messages:
+    if msg["role"] == "user":
+        # Usuario: Amarillo Canario (#FFEB3B) - Alineado Derecha
+        st.markdown(f"""
+        <div class="chat-row user-row">
+            <div class="chat-bubble user-bubble">
+                {msg["content"]}
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+    else:
+        # Asistente: Blanco (#FFFFFF) - Alineado Izquierda
+        st.markdown(f"""
+        <div class="chat-row bot-row">
+            <div class="chat-bubble bot-bubble">
+                {msg["content"]}
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
-if prompt := st.chat_input("Consulta a ALTIUS (Ej: ¿Cuántos salones tiene el plantel Acanceh? o ¿Cuándo inician clases?)"):
+# ---------------------------------------------------------
+# 8. LÓGICA DE INTERACCIÓN
+# ---------------------------------------------------------
+if prompt := st.chat_input("Escribe tu consulta aquí..."):
     
-    with st.chat_message("user"):
-        st.markdown(prompt)
+    # 1. Mostrar mensaje del usuario inmediatamente (Amarillo)
+    st.markdown(f"""
+    <div class="chat-row user-row">
+        <div class="chat-bubble user-bubble">
+            {prompt}
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
     st.session_state.messages.append({"role": "user", "content": prompt})
 
-    with st.chat_message("assistant"):
-        message_placeholder = st.empty()
-        full_response = ""
-        
+    # 2. Generar respuesta
+    if client:
         try:
-            # Construcción de mensajes
             messages_api = [{"role": "system", "content": SYSTEM_PROMPT}]
-            for msg in st.session_state.messages:
-                messages_api.append({"role": msg["role"], "content": msg["content"]})
+            for m in st.session_state.messages:
+                messages_api.append({"role": m["role"], "content": m["content"]})
 
-            # Llamada al modelo con LÍMITE DE TOKENS (Cost control)
             stream = client.chat.completions.create(
                 model=MODEL_NAME,
                 messages=messages_api,
                 stream=True,
                 temperature=0.3,
-                max_tokens=300  # <--- Límite duro para controlar costos
+                max_tokens=350
             )
-            
+
+            response_placeholder = st.empty()
+            full_response = ""
+
+            # Streaming de la respuesta (Blanco)
             for chunk in stream:
                 if chunk.choices[0].delta.content:
-                    content = chunk.choices[0].delta.content
-                    full_response += content
-                    message_placeholder.markdown(full_response + "▌")
+                    full_response += chunk.choices[0].delta.content
+                    response_placeholder.markdown(f"""
+                    <div class="chat-row bot-row">
+                        <div class="chat-bubble bot-bubble">
+                            {full_response} ▌
+                        </div>
+                    </div>
+                    """, unsafe_allow_html=True)
             
-            message_placeholder.markdown(full_response)
+            # Resultado final sin cursor
+            response_placeholder.markdown(f"""
+            <div class="chat-row bot-row">
+                <div class="chat-bubble bot-bubble">
+                    {full_response}
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+            
             st.session_state.messages.append({"role": "assistant", "content": full_response})
 
         except Exception as e:
-            st.error(f"Error técnico en el sistema ALTIUS: {e}")
+            st.error(f"Error en la comunicación con el modelo: {e}")
