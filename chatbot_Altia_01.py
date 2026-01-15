@@ -3,134 +3,7 @@ from openai import OpenAI
 import os
 
 # ---------------------------------------------------------
-# 1. CONFIGURACIÓN DE PÁGINA
-# ---------------------------------------------------------
-st.set_page_config(page_title="ALTIUS COBAY", page_icon="🎓", layout="wide")
-
-# ---------------------------------------------------------
-# 2. ESTILOS CSS (FRONTEND WHATSAPP - PALETA INSTITUCIONAL)
-# ---------------------------------------------------------
-st.markdown("""
-<style>
-    /* 1. Fondo general de la aplicación: NEGRO (Grafito Oscuro con Textura) */
-    .stApp {
-        background-color: #121212;
-        background-image: linear-gradient(30deg, #1a1a1a 12%, transparent 12.5%, transparent 87%, #1a1a1a 87.5%, #1a1a1a),
-        linear-gradient(150deg, #1a1a1a 12%, transparent 12.5%, transparent 87%, #1a1a1a 87.5%, #1a1a1a),
-        linear-gradient(30deg, #1a1a1a 12%, transparent 12.5%, transparent 87%, #1a1a1a 87.5%, #1a1a1a),
-        linear-gradient(150deg, #1a1a1a 12%, transparent 12.5%, transparent 87%, #1a1a1a 87.5%, #1a1a1a),
-        linear-gradient(60deg, #222222 25%, transparent 25.5%, transparent 75%, #222222 75%, #222222),
-        linear-gradient(60deg, #222222 25%, transparent 25.5%, transparent 75%, #222222 75%, #222222);
-        background-size: 80px 140px;
-        background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;
-    }
-
-    /* 2. Ocultar elementos nativos de Streamlit */
-    header {visibility: hidden;}
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-
-    /* 3. Encabezado Personalizado: GUINDA */
-    .whatsapp-header {
-        background-color: #8A1538; /* Guinda Institucional */
-        padding: 15px;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        z-index: 999;
-        display: flex;
-        align-items: center;
-        color: white;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-        border-bottom: 2px solid #FFD700; /* Línea sutil amarilla */
-    }
-    .whatsapp-header img {
-        border-radius: 50%;
-        width: 45px;
-        height: 45px;
-        margin-left: 20px;
-        margin-right: 15px;
-        border: 2px solid white;
-    }
-    .whatsapp-header h1 {
-        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-        font-size: 22px;
-        margin: 0;
-        color: #FFFFFF; /* Texto Blanco */
-        font-weight: 600;
-        letter-spacing: 0.5px;
-    }
-    .whatsapp-header .status {
-        font-size: 12px; 
-        color: #FFEB3B; /* Texto Amarillo Canario para el estado */
-    }
-    
-    /* Ajuste del contenedor principal */
-    .block-container {
-        padding-top: 90px !important;
-        padding-bottom: 120px !important;
-    }
-
-    /* 4. Estructura de Mensajes */
-    .chat-row {
-        display: flex;
-        margin-bottom: 15px;
-        width: 100%;
-    }
-    
-    .user-row {
-        justify-content: flex-end; 
-    }
-    
-    .bot-row {
-        justify-content: flex-start; 
-    }
-
-    .chat-bubble {
-        padding: 12px 18px;
-        border-radius: 12px;
-        max-width: 75%;
-        font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
-        font-size: 16px;
-        line-height: 1.5;
-        position: relative;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-    }
-
-    /* Burbuja del Usuario: AMARILLO CANARIO */
-    .user-bubble {
-        background-color: #FFEB3B; /* Amarillo Canario Intenso */
-        color: #000000; /* Texto Negro para contraste */
-        border-top-right-radius: 0;
-        border: 1px solid #FBC02D;
-    }
-
-    /* Burbuja del Bot: BLANCO */
-    .bot-bubble {
-        background-color: #FFFFFF; /* Blanco Puro */
-        color: #000000; /* Texto Negro */
-        border-top-left-radius: 0;
-        border: 1px solid #E0E0E0;
-    }
-</style>
-""", unsafe_allow_html=True)
-
-# ---------------------------------------------------------
-# 3. HEADER VISUAL (HTML)
-# ---------------------------------------------------------
-st.markdown("""
-<div class="whatsapp-header">
-    <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png" alt="Profile">
-    <div>
-        <h1>ALTIUS COBAY</h1>
-        <div class="status">● En línea | Consultoría Inteligente</div>
-    </div>
-</div>
-""", unsafe_allow_html=True)
-
-# ---------------------------------------------------------
-# 4. BASE DE CONOCIMIENTO MAESTRA DE ALTIUS COBAY (COMPLETA)
+# 1. BASE DE CONOCIMIENTO MAESTRA DE ALTIUS COBAY
 # ---------------------------------------------------------
 DATOS_RAG = [
     # =========================================================================
@@ -246,6 +119,7 @@ DATOS_RAG = [
         "metadata": { "sección": "Cap XVIII, XIX y Transitorios", "tipo_documento": "Reglamento Interior de Trabajo" },
         "contenido": "Art 88: Incompatibilidad de dos plazas. Vigencia desde 24 abril 2014."
     },
+
     # =========================================================================
     # BLOQUE 2: REGLAMENTO ACADÉMICO
     # =========================================================================
@@ -329,6 +203,7 @@ DATOS_RAG = [
         "metadata": { "tipo_documento": "Reglamento Académico", "sección": "Título II Cap IX y Transitorios: Sanciones (Arts. 80-82)" },
         "contenido": "Art 80 Sanciones: Amonestación, Suspensión (max 3 días), Baja temporal, Baja definitiva. Art 82: Baja definitiva por indisciplina grave requiere dictamen Dir. Académica. Vigencia desde 2017."
     },
+
     # =========================================================================
     # BLOQUE 3: CONTRATO COLECTIVO DE TRABAJO
     # =========================================================================
@@ -422,6 +297,7 @@ DATOS_RAG = [
         "metadata": { "sección": "Días Personales y Tabulador (Clausulas 91-Final)", "tipo_documento": "Contrato Colectivo de Trabajo" },
         "contenido": "Cláusula 91 Uniformes. Cláusula 92-95 Descansos: Cumpleaños, Día Madre/Padre, Luto (3 días directo, 2 indirecto). Anexo Tabulador: Técnico ($7.5k-11k), Vigilante ($8.4k), Profesor CB I ($435/hr)."
     },
+
     # =========================================================================
     # BLOQUE 4: DIRECTORIO INSTITUCIONAL
     # =========================================================================
@@ -430,24 +306,24 @@ DATOS_RAG = [
         "metadata": { "sección": "Dirección General y Staff", "tipo_documento": "Directorio Institucional" },
         "contenido": """
         DIRECTORIO DE AUTORIDADES DEL COBAY:
-          
+         
         1. DIRECCIÓN GENERAL
            - Titular: Mtro. Didier Manuel De Jesús Barrera Novelo (Director General).
            - Dirección: Calle 34 núm. 420-B x 35, Col. López Mateos, Mérida.
            - Teléfono: (999) 611 8690 Ext. 28051 y 28052.
-          
+         
         2. UNIDAD DE VINCULACIÓN
            - Titular: Ing. Manuel Alberto Bonilla Campo (Jefe de Unidad).
            - Teléfono: Ext. 28091.
-          
+         
         3. COMUNICACIÓN SOCIAL
            - Titular: Lic. Martín Rodrigo Kauil Conde (Jefe de Departamento).
            - Teléfono: Ext. 28007.
-          
+         
         4. RELACIONES PÚBLICAS
            - Titular: Lic. Oswaldo Cardeña Medina (Jefe de Departamento).
            - Teléfono: Ext. 28007.
-          
+         
         5. DIRECCIÓN JURÍDICA
            - Titular: Mtro. David Alejandro Patrón Bianchi (Director Jurídico).
            - Teléfono: Ext. 28044 y 28045.
@@ -500,95 +376,11 @@ DATOS_RAG = [
            - Coordinación EMSAD: Laet. Minelia Soberanis Herrera. Tel: Ext. 28039.
         """
     },
+
     # =========================================================================
-    # BLOQUE 5: CALENDARIO ESCOLAR
+    # BLOQUE 5: ELIMINADO (Calendario Escolar)
     # =========================================================================
-    {
-        "id": "cal_01",
-        "metadata": { "sección": "Febrero - Marzo 2026", "tipo_documento": "Calendario Escolar" },
-        "contenido": """
-        FEBRERO 2026:
-        - 02/Feb: Suspensión de Labores (Inhábil).
-        - 03/Feb: Inicio de semestre 2026-A (Administrativo).
-        - 04/Feb: Reunión de Trabajo Colegiado (2 días).
-        - 06/Feb: Inicio de clases del semestre (Académico).
-        - Fines de semana: Eval. Extraordinarios 1º, 3º, 5º Sem.
 
-        MARZO 2026:
-        - 02/Mar: 1er Examen Parcial de 6º Semestre.
-        - 09/Mar: 1er Examen Parcial de 2º y 4º Semestre.
-        - 16/Mar: Suspensión de Labores (Inhábil).
-        - 17/Mar: Eval. Especial de 1º, 3º y 5º semestre.
-        - 23/Mar: Eval. Cap. Administración (4º y 6º Sem).
-        - 24/Mar: Eval. Cap. Interv. Educ. Oblig (4º y 6º Sem).
-        - 25/Mar: Eval Cap TIC'S (4º y 6º Sem).
-        - 27/Mar: Entrega de Boletas 1er parcial.
-        - 30/Mar: Inicio Período de Vacaciones.
-        - Fines de semana: Eval. Extraordinarios 1º, 3º, 5º Sem.
-        """
-    },
-    {
-        "id": "cal_02",
-        "metadata": { "sección": "Abril - Mayo 2026", "tipo_documento": "Calendario Escolar" },
-        "contenido": """
-        ABRIL 2026:
-        - 01-10/Abr: Periodo de Vacaciones.
-        - 13/Abr: Eval. Extraord Capacitaciones (4º y 6º Sem).
-        - 20/Abr: Eval. Cap. Higiene y Salud Com. (4º y 6° sem).
-        - 21/Abr: Eval Cap. Turismo (4º y 6º Sem).
-        - 27/Abr: Eval. Especial de 1º, 3º y 5º semestre.
-        - 28/Abr: 2do. Examen Parcial de 6º Sem.
-        - 29/Abr: Eval. Extraord Capacitaciones (4º y 6º Sem).
-        - 30/Abr: 2do. Examen Parcial de 2º y 4º Sem.
-        - Fines de semana: Eval. Extraordinarios 1º, 3º, 5º Sem.
-
-        MAYO 2026:
-        - 01/May: Suspensión de Labores (Inhábil).
-        - 04/May: Continuación 2do. Examen Parcial 6º Sem.
-        - 11/May: Continuación 2do. Examen Parcial 2º y 4º Sem.
-        - 18/May: Eval. Especial 1º, 3º y 5º semestre.
-        - 22/May: Entrega de Boletas 2º parcial (6º sem).
-        - 25/May: Fecha límite para solicitar Certificados al DCE.
-        - 29/May: Entrega de Boletas 2º parcial (2º y 4º sem).
-        - Fines de semana: Eval. Extraordinarios 1º, 3º, 5º Sem.
-        """
-    },
-    {
-        "id": "cal_03",
-        "metadata": { "sección": "Junio - Agosto 2026", "tipo_documento": "Calendario Escolar" },
-        "contenido": """
-        JUNIO 2026:
-        - 01/Jun: Eval todas las Capacitaciones 6º Sem.
-        - 02/Jun: 3er. Examen Parcial de 6º sem.
-        - 03/Jun: Eval todas las Capacitaciones 4º Sem.
-        - 04/Jun: Reinscripción Repetidores 3º y 5º Sem.
-        - 05/Jun: Eval. Extraord Capacitaciones 6º Sem.
-        - 06/Jun: 3er. Examen Parcial 2º y 4º Sem.
-        - 07/Jun: Solicitud Certificados Egresión (FC).
-        - 08/Jun: Periodo Recuperación 6º semestre.
-        - 09/Jun: Eval Extraord Capacitaciones 4º Sem.
-        - 10/Jun: Solicitud Certificados Egresión (Ext).
-        - 11/Jun: Entrega Boletas 3er parcial (2º y 4º sem).
-        - 12/Jun: Reinscripciones 3º y 5º semestre.
-        - 13/Jun: Período Recuperación 2º y 4º Sem.
-
-        JULIO 2026:
-        - 01/Jul: Ceremonia de Entrega de Certificados.
-        - 02/Jul: Trámites de Equivalencia, Traslados.
-        - 03/Jul: Inscripciones de Nuevo Ingreso.
-        - 04/Jul: Entrega Boletas Recuperación.
-        - 05/Jul: Fin de Semestre 2026-A.
-        - 06/Jul: Inicio Receso de Clases.
-
-        AGOSTO 2026:
-        - 01/Ago: Receso Dirección General.
-        - 02/Ago: Receso Planteles.
-        - 03/Ago: Inicio Ciclo Escolar 2026-2027 (26-B).
-        - 04/Ago: Trámites Equivalencia/Traslados.
-        - 05/Ago: Reinscripciones 3º y 5º semestre.
-        - 06/Ago: Reinscripción Repetidores 1º Sem.
-        """
-    },
     # =========================================================================
     # BLOQUE 6: PLANTELES Y MATRÍCULA 2025-B
     # =========================================================================
@@ -709,6 +501,7 @@ DATOS_RAG = [
         11. XCAN: 203 alumnos (1º:75, 3º:67, 5º:61).
         """
     },
+
     # =========================================================================
     # BLOQUE 7: INFRAESTRUCTURA (Inventario de Salones y Turnos)
     # =========================================================================
@@ -804,11 +597,284 @@ DATOS_RAG = [
         84. Yaxkukul: 3 Salones. 1º(Matutino), 3º(Matutino), 5º(Matutino).
         85. Yobain: 3 Salones. 1º(Matutino), 3º(Matutino), 5º(Matutino).
         """
+    },
+
+    # =========================================================================
+    # BLOQUE 8: PLAN ESTATAL DE DESARROLLO 2024-2030 (Directriz 3)
+    # =========================================================================
+    {
+      "id": "chunk_01",
+      "metadata": {
+        "sección": "Visión General y Educación Humanista",
+        "tipo_documento": "Plan Estatal de Desarrollo 2024-2030",
+        "pagina_inicio": 85,
+        "pagina_fin": 86
+      },
+      "contenido": "Yucatán vive el mejor momento de su historia con una educación humanista, una cultura viva que celebra sus raíces, y un pueblo que encuentra en la actividad física y deportiva una fuente de bienestar compartido. La Nueva Escuela Mexicana transforma conciencias y forma una ciudadanía con pensamiento crítico, con la fraternidad como valor esencial. Las juventudes de todos los rincones de nuestro estado, en igualdad de oportunidades, pueden acceder a una educación superior de excelencia. En Yucatán, la educación, cultura y deporte son los pilares de nuestra cohesión social. Directriz 3: Educación, Cultura y Deporte. 3.1. Educación humanista: Promueve un nuevo modelo educativo humanista, impulsando la 'Nueva Escuela Mexicana' (NEM) centrada en la 'revolución de conciencias', donde se fomente el pensamiento crítico, la empatía, la ética y la responsabilidad social. Esta vertiente busca transformar las aulas en espacios inclusivos y participativos, priorizando la capacitación docente, la actualización de los planes de estudio y el uso de tecnologías educativas. Incluye acciones para mejorar la infraestructura educativa y garantizar que todas las comunidades, incluidas las rurales e indígenas, tengan acceso equitativo a este modelo."
+    },
+    {
+      "id": "chunk_02",
+      "metadata": {
+        "sección": "3.1 Educación Humanista - Rezago e Infraestructura",
+        "tipo_documento": "Plan Estatal de Desarrollo 2024-2030",
+        "pagina_inicio": 86,
+        "pagina_fin": 87
+      },
+      "contenido": "Esta vertiente busca transformar las aulas en espacios inclusivos y participativos, priorizando la capacitación docente. 3.1.1. Objetivo estratégico: Reducir el rezago educativo en la educación básica y media superior en Yucatán. 3.1.1.1. Objetivo específico: Implementar procesos educativos innovadores. Líneas de Acción: Desarrollar actividades extracurriculares para estudiantes con rezago; establecer canales de comunicación con padres y maestros; implementar estrategias de apoyo emocional para evitar el abandono escolar; e impulsar la equidad de género y la interculturalidad. 3.1.1.2. Objetivo específico: Mejorar la infraestructura en las escuelas de comunidades maya hablantes con mayor rezago. Líneas de Acción: Renovar aulas para accesibilidad; optimizar infraestructura mediante internet y tecnologías; rehabilitar bibliotecas; verificar servicios básicos (agua, electricidad); fomentar participación comunitaria en mantenimiento; integrar equipos interdisciplinarios (psicología, trabajo social); e impulsar la modernización de instalaciones hidráulicas y eléctricas."
+    },
+    {
+      "id": "chunk_03",
+      "metadata": {
+        "sección": "3.1 Educación Humanista - Analfabetismo y Cobertura",
+        "tipo_documento": "Plan Estatal de Desarrollo 2024-2030",
+        "pagina_inicio": 87,
+        "pagina_fin": 87
+      },
+      "contenido": "Impulsar la modernización de instalaciones hidráulicas y eléctricas en escuelas. 3.1.1.3. Objetivo específico: Disminuir el analfabetismo prioritariamente en las comunidades maya hablantes. Líneas de Acción: Promover la lectura a lo largo de la vida; establecer círculos de lectura; fortalecer el hábito lector y pensamiento crítico mediante bibliotecas; diseñar actividades para población joven y adulta; fortalecer Misiones Culturales para disminuir el analfabetismo y formar a sus docentes bajo la Nueva Escuela Mexicana. 3.1.1.4. Objetivo específico: Ampliar la cobertura en educación básica y media superior, especialmente en áreas rurales. Líneas de Acción: Ejecutar acciones de infraestructura en comunidades maya-hablantes; estrategias para acceso y permanencia; fortalecer esquema de becas para estudiantes con dificultades económicas; e involucrar a líderes comunitarios para promover la inscripción escolar."
+    },
+    {
+      "id": "chunk_04",
+      "metadata": {
+        "sección": "3.1 Educación Humanista - Currículo NEM y Docentes",
+        "tipo_documento": "Plan Estatal de Desarrollo 2024-2030",
+        "pagina_inicio": 88,
+        "pagina_fin": 88
+      },
+      "contenido": "Involucrar a líderes comunitarios para promover la inscripción escolar. 3.1.1.5. Objetivo específico: Implementar currículos educativos, incorporando enfoques pedagógicos de la Nueva Escuela Mexicana (NEM). Líneas de Acción: Formación y actualización docente en la NEM; implementar planes de estudio acordes a la NEM; valorar procesos de aprendizaje para evaluación formativa; fomentar pensamiento crítico, científico, ético y emocional; fomentar inclusión de necesidades educativas específicas; y desarrollar proyectos comunitarios transversales. 3.1.1.6. Objetivo específico: Mejorar las condiciones laborales de los trabajadores de la educación. Líneas de Acción: Fomentar comunidades profesionales de aprendizaje; mejorar sistema de reconocimiento profesional; garantizar derechos laborales y humanos; asegurar ambiente laboral saludable (físico y emocional); prevenir demandas injustificadas; y gestionar salario justo valorando formación y experiencia."
+    },
+    {
+      "id": "chunk_05",
+      "metadata": {
+        "sección": "3.1 Educación Intercultural y Lengua Maya",
+        "tipo_documento": "Plan Estatal de Desarrollo 2024-2030",
+        "pagina_inicio": 88,
+        "pagina_fin": 89
+      },
+      "contenido": "Gestionar salario justo para docentes. 3.1.2. Objetivo estratégico: Garantizar una educación intercultural bilingüe en las comunidades maya hablantes. 3.1.2.1. Objetivo específico: Potenciar el reconocimiento de la lengua materna con énfasis en la lengua maya. Líneas de Acción: Generar espacios educativos para ambas lenguas; fortalecer diálogos interculturales; fomentar respeto y tolerancia; fortalecer identidad maya mediante enseñanza de la lengua en todos los niveles y espacios públicos/privados; incentivar conocimiento de historia y cosmovisión yucateca; diseñar estrategias para educandos con enfoque intercultural. 3.1.2.2. Objetivo específico: Reconocer a comunidades afrodescendientes y migrantes. Líneas de Acción: Proyectos de intercambio escuela-comunidad; fomentar empatía hacia diferencias culturales; proyectos que visibilicen raíces culturales; y talleres sobre diversidad y no discriminación."
+    },
+    {
+      "id": "chunk_06",
+      "metadata": {
+        "sección": "3.1 Educación Indígena - Infraestructura y Formación",
+        "tipo_documento": "Plan Estatal de Desarrollo 2024-2030",
+        "pagina_inicio": 89,
+        "pagina_fin": 90
+      },
+      "contenido": "Talleres sobre diversidad y no discriminación. 3.1.2.3. Objetivo específico: Mejorar infraestructura escolar en comunidades maya-hablantes. Líneas de Acción: Espacios de calidad con servicios básicos; valorar aumento de docentes según necesidades; elaborar material académico pertinente a la Nueva Educación Indígena; promover conectividad y TIC. 3.1.2.4. Objetivo específico: Capacitación docente en lengua maya. Líneas de Acción: Coordinar formación docente en Nueva Educación Indígena; diseñar perfil pertinente para docentes; promover aprendizaje de maya en escuelas para identidad cultural; certificación de maestros en lengua maya. 3.1.2.5. Objetivo específico: Asegurar educación integral y humanista en lengua maya. Líneas de Acción: Formación docente en filosofía maya y equidad; adecuaciones curriculares lingüísticas; fortalecer valores de interculturalidad; integrar lengua maya como asignatura."
+    },
+    {
+      "id": "chunk_07",
+      "metadata": {
+        "sección": "3.1 Educación Básica y Media - Tecnología e Inclusión",
+        "tipo_documento": "Plan Estatal de Desarrollo 2024-2030",
+        "pagina_inicio": 90,
+        "pagina_fin": 91
+      },
+      "contenido": "Integrar lengua maya como asignatura. 3.1.3. Objetivo estratégico: Extender la Nueva Escuela Mexicana en educación básica y media superior. 3.1.3.1. Objetivo específico: Fortalecer infraestructura con tecnología. Líneas de Acción: Incrementar equipamiento informático y conectividad; fortalecer enseñanza con TIC en media superior; formación docente en uso didáctico de tecnología; mantenimiento de edificios. 3.1.3.2. Objetivo específico: Diseñar acciones para la NEM. Líneas de Acción: Talleres tecnológicos para docentes; fortalecer educación humanista; coordinación interinstitucional; actualizar materiales educativos alineados a la NEM. 3.1.3.3. Objetivo específico: Garantizar educación especial inclusiva. Líneas de Acción: Personal para USAER; creación de nuevos Centros de Atención Múltiple (CAM); convenios de apoyo; formación docente para atender diversas capacidades; estrategias colaborativas entre especialistas y padres."
+    },
+    {
+      "id": "chunk_08",
+      "metadata": {
+        "sección": "3.1 Educación Media Superior - Pertinencia y Evaluación",
+        "tipo_documento": "Plan Estatal de Desarrollo 2024-2030",
+        "pagina_inicio": 91,
+        "pagina_fin": 92
+      },
+      "contenido": "Estrategias colaborativas entre especialistas y padres. 3.1.3.4. Objetivo específico: Mejorar eficacia en educación media superior. Líneas de Acción: Vincular educación con sector productivo; fomentar comunicación con padres; talleres sobre violencia escolar; consolidar educación dual; acciones innovadoras ante necesidades actuales; garantizar acceso inclusivo. 3.1.3.5. Objetivo específico: Mejorar pertinencia de planes de estudio. Líneas de Acción: Formación docente en metodologías NEM; implementación de evaluación formativa; uso de herramientas tecnológicas; trabajo colaborativo estudiantil; mejorar instrumentos de evaluación. 3.1.3.6. Objetivo específico: Mejorar evaluación educativa. Líneas de Acción: Fomentar evaluación entre pares docentes; autoevaluación docente; verificar aplicación de planeación educativa; identificar áreas de mejora mediante evaluación periódica de métodos de enseñanza."
+    },
+    {
+      "id": "chunk_09",
+      "metadata": {
+        "sección": "3.2 Cultura con Identidad - Infraestructura",
+        "tipo_documento": "Plan Estatal de Desarrollo 2024-2030",
+        "pagina_inicio": 92,
+        "pagina_fin": 93
+      },
+      "contenido": "3.2. Cultura con identidad: Rescata, preserva y promueve tradiciones y expresiones artísticas, fomentando la participación comunitaria y democratización cultural. 3.2.1. Objetivo estratégico: Mejorar infraestructura de espacios culturales en municipios. 3.2.1.1. Objetivo específico: Incrementar infraestructura cultural integral. Líneas de Acción: Coordinar oferta con casas de cultura y gremios; modernizar espacios existentes; fomentar aprecio por patrimonio; diagnóstico de infraestructura. 3.2.1.2. Objetivo específico: Colaboración para creación de casas de cultura. Líneas de Acción: Crear modelo adaptable de casa de cultura; diagnóstico de necesidades municipales; concientizar sobre beneficios de espacios culturales; red de municipios para gestión cultural. 3.2.1.3. Objetivo específico: Integración municipal a programación estatal. Líneas de Acción: Presencia de creadores yucatecos en municipios; programación en escuelas públicas; agenda cultural conjunta estado-municipios."
+    },
+    {
+      "id": "chunk_10",
+      "metadata": {
+        "sección": "3.2 Cultura - Consejos Regionales y Patrimonio",
+        "tipo_documento": "Plan Estatal de Desarrollo 2024-2030",
+        "pagina_inicio": 93,
+        "pagina_fin": 94
+      },
+      "contenido": "Agenda cultural conjunta estado-municipios. 3.2.1.4. Objetivo específico: Integración de consejos consultivos de arte y cultura regionales. Líneas de Acción: Gestionar creación de consejos; asesorar en diseño de programación; talleres de gestión cultural para integrantes; involucrar a la comunidad en decisiones. 3.2.1.5. Objetivo específico: Actualizar estadística de infraestructura cultural. Líneas de Acción: Directorio de museos y bibliotecas; colaboración con universidades; plataforma digital de datos culturales; visitas de verificación; plataforma de promoción de actividades. 3.2.2. Objetivo estratégico: Ampliar infraestructura y patrimonio cultural. 3.2.2.1. Objetivo específico: Preservación del patrimonio. Líneas de Acción: Estrategias acordes a cosmovisión maya; apropiación social del patrimonio; inclusión en planes de desarrollo urbano y turístico; archivos locales comunitarios."
+    },
+    {
+      "id": "chunk_11",
+      "metadata": {
+        "sección": "3.2 Cultura - Catálogos, Festivales y Difusión",
+        "tipo_documento": "Plan Estatal de Desarrollo 2024-2030",
+        "pagina_inicio": 94,
+        "pagina_fin": 95
+      },
+      "contenido": "Archivos locales comunitarios. 3.2.2.2. Objetivo específico: Elaborar catálogo del patrimonio cultural. Líneas de Acción: Catálogos literarios municipales; fondo de consulta Rita Cetina Gutiérrez; actualizar catálogos patrimoniales; colaboración interinstitucional. 3.2.2.3. Objetivo específico: Difundir patrimonio a través de festivales. Líneas de Acción: Calendario de festividades coordinado; talleres gastronómicos; promover creación musical como patrimonio; profesionalizar gremio audiovisual; establecer al Estado como destino fílmico. 3.2.2.4. Objetivo específico: Preservar y difundir grandeza patrimonial en casas de cultura. Líneas de Acción: Estudios y publicaciones locales; charlas y conferencias coordinadas; capacitaciones para profesionalización cultural; identificar expresiones en riesgo de desaparecer."
+    },
+    {
+      "id": "chunk_12",
+      "metadata": {
+        "sección": "3.2 Cultura - Artistas y Creadores",
+        "tipo_documento": "Plan Estatal de Desarrollo 2024-2030",
+        "pagina_inicio": 96,
+        "pagina_fin": 97
+      },
+      "contenido": "Identificar expresiones en riesgo de desaparecer. 3.2.3. Objetivo estratégico: Aumentar obras e iniciativas de creadores. 3.2.3.1. Objetivo específico: Actualizar censo de agentes culturales. Líneas de Acción: Actualizar información con municipios; registro estatal por categoría; protocolo estandarizado de registro; plataforma de autogestión de datos. 3.2.3.2. Objetivo específico: Reconocer a artistas con labor social. Líneas de Acción: Difusión de eventos de reconocimiento; visibilizar trabajo social artístico; establecer categorías de reconocimiento; documentar trayectorias. 3.2.3.3. Objetivo específico: Incentivar comercialización de bienes artísticos. Líneas de Acción: Eventos y exposiciones para mercado local; convenios laborales con empresas; presencia en ferias fuera del estado."
+    },
+    {
+      "id": "chunk_13",
+      "metadata": {
+        "sección": "3.2 Cultura - Profesionalización y Artistas Mayas",
+        "tipo_documento": "Plan Estatal de Desarrollo 2024-2030",
+        "pagina_inicio": 97,
+        "pagina_fin": 97
+      },
+      "contenido": "Presencia en ferias fuera del estado. 3.2.3.4. Objetivo específico: Impulsar profesionalización artística. Líneas de Acción: Canalizar artistas a recursos públicos; programas de mentoría; apoyo para convocatorias y concursos nacionales/internacionales. 3.2.3.5. Objetivo específico: Impulsar artistas mayas. Líneas de Acción: Inclusión en ferias y festivales; rutas turísticas a talleres mayas; focalizar promoción en comunidades de artistas; eventos inmersivos en lengua maya. 3.2.3.6. Objetivo específico: Promover música yucateca. Líneas de Acción: Difusión para ampliar audiencias; inclusión en eventos estatales; rutas turísticas musicales."
+    },
+    {
+      "id": "chunk_14",
+      "metadata": {
+        "sección": "3.3 Cultura Física y Deporte - Espacios y Salud",
+        "tipo_documento": "Plan Estatal de Desarrollo 2024-2030",
+        "pagina_inicio": 98,
+        "pagina_fin": 98
+      },
+      "contenido": "3.3. Cultura física y deporte: Fomenta la cultura física para mejorar la salud y el tejido social, mediante espacios deportivos, formación de atletas y actividades recreativas inclusivas. 3.3.1. Objetivo estratégico: Extender la cultura física. 3.3.1.1. Objetivo específico: Optimizar espacios de recreación para enfrentar obesidad. Líneas de Acción: Dotar infraestructura en parques y escuelas; fomentar uso de espacios municipales; rehabilitar y modernizar espacios recreativos. 3.3.1.2. Objetivo específico: Coordinación salud-cultura física contra sedentarismo. Líneas de Acción: Impulsar deporte en esquemas de salud; ampliar cobertura de deporte social; campañas conjuntas sobre actividad física. 3.3.1.3. Objetivo específico: Estilo de vida saludable en niños y adolescentes. Líneas de Acción: Coordinación salud-educación-deporte en escuelas; talleres de alimentación e higiene; eventos deportivos infantiles."
+    },
+    {
+      "id": "chunk_15",
+      "metadata": {
+        "sección": "3.3 Deporte - Sectores Vulnerables y Ligas",
+        "tipo_documento": "Plan Estatal de Desarrollo 2024-2030",
+        "pagina_inicio": 98,
+        "pagina_fin": 99
+      },
+      "contenido": "Eventos deportivos infantiles. 3.3.1.4. Objetivo específico: Acceso al deporte para sectores vulnerables. Líneas de Acción: Talleres de recreación y salud; mejorar instalaciones municipales; identificar necesidades específicas de población vulnerable. 3.3.1.5. Objetivo específico: Descentralización regional del deporte. Líneas de Acción: Acuerdos estatales-municipales; Centros de Promoción y Desarrollo Deportivo en el interior; garantizar accesibilidad. 3.3.2. Objetivo estratégico: Impulsar la práctica del deporte. 3.3.2.1. Objetivo específico: Vinculación municipal para deporte social y juegos tradicionales. Líneas de Acción: Fomentar deporte social y juegos tradicionales en municipios; redes de colaboración intermunicipal. 3.3.2.2. Objetivo específico: Mejorar centros deportivos municipales. Líneas de Acción: Mantenimiento preventivo; ligas infantiles y amateur intermunicipales; equipamiento de calidad."
+    },
+    {
+      "id": "chunk_16",
+      "metadata": {
+        "sección": "3.3 Deporte Escolar y Alto Rendimiento",
+        "tipo_documento": "Plan Estatal de Desarrollo 2024-2030",
+        "pagina_inicio": 99,
+        "pagina_fin": 100
+      },
+      "contenido": "Equipamiento de calidad. 3.3.2.3. Objetivo específico: Fortalecer educación física escolar. Líneas de Acción: Monitorear ligas escolares; uso de parques para activación física; actualizar currículo de educación física (inclusivo). 3.3.2.4. Objetivo específico: Fortalecer centros de desarrollo y ligas estatales. Líneas de Acción: Promover deporte amateur; ligas intermunicipales; rehabilitar centros deportivos. 3.3.3. Objetivo estratégico: Ampliar deporte de alto rendimiento. 3.3.3.1. Objetivo específico: Identificar talentos deportivos. Líneas de Acción: Coordinación con Instituto del Deporte y escuelas para detección; fortalecer academias para representar a Yucatán; jornadas de talentos. 3.3.3.2. Objetivo específico: Potenciar deportistas de alto rendimiento. Líneas de Acción: Planes de entrenamiento coordinados; capacitación de entrenadores; programas integrales (físico, técnico, psicológico)."
+    },
+    {
+      "id": "chunk_17",
+      "metadata": {
+        "sección": "3.3 Deporte - Paralímpicos, Medicina y CONADE",
+        "tipo_documento": "Plan Estatal de Desarrollo 2024-2030",
+        "pagina_inicio": 100,
+        "pagina_fin": 101
+      },
+      "contenido": "Programas integrales para deportistas. 3.3.3.3. Objetivo específico: Potenciar deportistas paralímpicos. Líneas de Acción: Entrenamientos para nivel nacional; detección de prospectos con discapacidad; certificación de entrenadores paralímpicos. 3.3.3.4. Objetivo específico: Medicina del deporte y ciencias aplicadas. Líneas de Acción: Modelos efectivos de salud física/mental; revisiones médicas periódicas; prevención de lesiones. 3.3.3.5. Objetivo específico: Mejorar infraestructura para alto rendimiento. Líneas de Acción: Facilitar espacios estatales a deportistas; gestionar uso de clubes; cumplir estándares de seguridad y accesibilidad. 3.3.3.6. Objetivo específico: Vincular con CONADE e institutos. Líneas de Acción: Fomentar mejores prácticas nacionales; fortalecer selecciones estatales; acuerdos con CONADE para cursos."
+    },
+    {
+      "id": "chunk_18",
+      "metadata": {
+        "sección": "3.4 Educación Superior - Acceso e Inclusión",
+        "tipo_documento": "Plan Estatal de Desarrollo 2024-2030",
+        "pagina_inicio": 102,
+        "pagina_fin": 103
+      },
+      "contenido": "3.4. Educación superior, inclusiva, equitativa y de excelencia: Garantiza acceso de calidad con atención a comunidades marginadas, promoviendo vinculación productiva y perspectiva de género. 3.4.1. Objetivo estratégico: Incrementar accesibilidad inclusiva. 3.4.1.1. Objetivo específico: Expandir acceso y equidad. Líneas de Acción: Educación superior virtual en áreas rurales; tutoría para bajo nivel académico; becas para comunidades indígenas y rurales; asesorías de pares; flexibilidad de horarios y educación a distancia. 3.4.1.2. Objetivo específico: Igualdad de género y diversidad. Líneas de Acción: Espacios para participación femenina en STEM; ambiente inclusivo y cero discriminación; talleres de sensibilización; espacios seguros. 3.4.1.3. Objetivo específico: Combatir el acoso. Líneas de Acción: Capacitación en prevención; protocolos de actuación claros; sensibilización sobre denuncia."
+    },
+    {
+      "id": "chunk_19",
+      "metadata": {
+        "sección": "3.4 Educación Superior - Salud Mental y Entorno",
+        "tipo_documento": "Plan Estatal de Desarrollo 2024-2030",
+        "pagina_inicio": 103,
+        "pagina_fin": 103
+      },
+      "contenido": "Sensibilización sobre denuncia de acoso. 3.4.1.4. Objetivo específico: Salud mental y bienestar. Líneas de Acción: Talleres manejo de estrés; campañas de salud mental y apoyo mutuo; gestión con CISAME; actividades recreativas para equilibrio vida-estudio. 3.4.1.5. Objetivo específico: Generar entorno inclusivo y equitativo. Líneas de Acción: Cuotas preferenciales para entornos desfavorecidos; transporte para estudiantes de municipios sin servicios educativos; difusión en comunidades marginadas; políticas de permanencia escolar. 3.4.2. Objetivo estratégico: Expandir acceso pertinente y de excelencia. 3.4.2.1. Objetivo específico: Planes de estudio pertinentes. Líneas de Acción: Actualización docente en nuevas tecnologías; vinculación media superior-superior; habilidades emergentes (IA, sustentabilidad); colaboración con industrias; convenios empresariales para prácticas."
+    },
+    {
+      "id": "chunk_20",
+      "metadata": {
+        "sección": "3.4 Educación Superior - Humanismo y Excelencia",
+        "tipo_documento": "Plan Estatal de Desarrollo 2024-2030",
+        "pagina_inicio": 104,
+        "pagina_fin": 105
+      },
+      "contenido": "Convenios empresariales para prácticas. 3.4.2.2. Objetivo específico: Integrar humanismo mexicano. Líneas de Acción: Formación integral y ética comunitaria; habilidades gerenciales y liderazgo ético; congresos sobre ética profesional; proyectos de responsabilidad social; pensamiento crítico. 3.4.2.3. Objetivo específico: Evaluación continua. Líneas de Acción: Retroalimentación oportuna; modificar actividades según evaluación; atención a rezago; feedback específico. 3.4.2.4. Objetivo específico: Evaluar excelencia académica. Líneas de Acción: Vínculos con acreditadoras; evaluar docencia, investigación y gestión; incentivos a investigación; autoevaluación interna; congresos internacionales."
+    },
+    {
+      "id": "chunk_21",
+      "metadata": {
+        "sección": "3.4 Educación Superior - Infraestructura y Movilidad",
+        "tipo_documento": "Plan Estatal de Desarrollo 2024-2030",
+        "pagina_inicio": 105,
+        "pagina_fin": 106
+      },
+      "contenido": "Congresos internacionales. 3.4.2.5. Objetivo específico: Mejorar infraestructura y recursos. Líneas de Acción: Apoyos para equipo electrónico y acceso (rampas); colaboración para gestión de recursos; alianzas para internet; modernización de seguridad y tecnología; recursos digitales y bibliotecas; espacios de innovación (Makerspaces); espacios de tutoría. 3.4.2.6. Objetivo específico: Intercambio y movilidad internacional. Líneas de Acción: Convenios para becas de movilidad; difusión accesible de intercambios; ferias internacionales; doble titulación; fortalecimiento del idioma inglés en el extranjero. 3.4.3. Objetivo estratégico: Promover innovación, investigación y desarrollo sostenible."
+    },
+    {
+      "id": "chunk_22",
+      "metadata": {
+        "sección": "3.4 Educación Superior - Tecnología e Investigación",
+        "tipo_documento": "Plan Estatal de Desarrollo 2024-2030",
+        "pagina_inicio": 106,
+        "pagina_fin": 107
+      },
+      "contenido": "3.4.3. Objetivo estratégico: Promover innovación e investigación. 3.4.3.1. Objetivo específico: Competencias digitales. Líneas de Acción: Capacitación en tecnologías emergentes (IA, robótica); laboratorios de innovación; centros de tecnología; becas empresariales para cursos tech; alianzas con empresas de vanguardia. 3.4.3.2. Objetivo específico: Fortalecer investigación. Líneas de Acción: Transferencia de tecnología vinculada a industria local; investigación en comunidades marginadas; fondos para salud y ciencias sociales; centros de excelencia en turismo sostenible y agrotecnología; difusión de impacto de investigación."
+    },
+    {
+      "id": "chunk_23",
+      "metadata": {
+        "sección": "3.4 Educación Superior - Comunidad y Sostenibilidad",
+        "tipo_documento": "Plan Estatal de Desarrollo 2024-2030",
+        "pagina_inicio": 107,
+        "pagina_fin": 107
+      },
+      "contenido": "Difusión de impacto de investigación. 3.4.3.3. Objetivo específico: Conexión con comunidad y responsabilidad social. Líneas de Acción: Comunidades de diálogo estudiantil; inserción técnica en empresas; servicio comunitario curricular; alianzas con ONGs para impacto social; voluntariado; proyectos de desarrollo comunitario sostenible. 3.4.3.4. Objetivo específico: Conciencia ambiental y sostenibilidad. Líneas de Acción: Ajustar planes educativos a conservación; campañas de reforestación/limpieza; reciclaje y energías renovables en campus; alianzas de conservación; jardines o laboratorios de biodiversidad. 3.4.3.5. Objetivo específico: Innovación y cultura emprendedora. Líneas de Acción: Proyectos de autoempleo; talleres de emprendimiento; vínculos para inserción laboral; cursos online de innovación."
+    },
+    {
+      "id": "chunk_24",
+      "metadata": {
+        "sección": "3.5 Empoderamiento de la Mujer - Acceso y Becas",
+        "tipo_documento": "Plan Estatal de Desarrollo 2024-2030",
+        "pagina_inicio": 108,
+        "pagina_fin": 109
+      },
+      "contenido": "3.5. Empoderamiento educativo y deportivo para las mujeres: Promueve acceso a programas que fortalezcan desarrollo integral, eliminando barreras y creando espacios seguros. 3.5.1. Objetivo estratégico: Aumentar acceso de mujeres a modelos educativos y deportivos. 3.5.1.1. Objetivo específico: Expandir acceso en sectores vulnerables. Líneas de Acción: Plataformas virtuales; centros deportivos con perspectiva de género; ligas femeninas inclusivas. 3.5.1.2. Objetivo específico: Disminuir brechas de desigualdad. Líneas de Acción: Campañas en comunidades con rezago; espacios de liderazgo; programas adaptados a zonas rurales e indígenas. 3.5.1.3. Objetivo específico: Difusión de modelos. Líneas de Acción: Ferias educativas y deportivas municipales; lenguaje inclusivo. 3.5.1.4. Objetivo específico: Acceso a becas. Líneas de Acción: Difusión de sistemas de becas; alianzas para identificar oportunidades; priorizar grupos vulnerables. 3.5.1.5. TIC: Portal de ofertas educativas/deportivas; plataformas en línea."
+    },
+    {
+      "id": "chunk_25",
+      "metadata": {
+        "sección": "3.5 Empoderamiento de la Mujer - Liderazgo",
+        "tipo_documento": "Plan Estatal de Desarrollo 2024-2030",
+        "pagina_inicio": 109,
+        "pagina_fin": 110
+      },
+      "contenido": "Plataformas en línea. 3.5.2. Objetivo estratégico: Incorporar modelos de liderazgo y empoderamiento. 3.5.2.1. Objetivo específico: Procesos de formación en liderazgo. Líneas de Acción: Eventos con mujeres líderes; capacitación para liderazgo educativo/deportivo; programas de mentoría. 3.5.2.2. Objetivo específico: Habilidades de liderazgo. Líneas de Acción: Capacitación en confianza y comunicación; equidad de género y derechos humanos; talleres de toma de decisiones. 3.5.2.3. Objetivo específico: Transformación profesional. Líneas de Acción: Evaluar necesidades profesionales; mentoría de líderes diversos sectores; acceso a financiamiento para emprendimiento. 3.5.2.4. Objetivo específico: Mujer como promotora. Líneas de Acción: Impulsar promotoras locales; inclusión en comités y consejos; roles de liderazgo en equipos."
+    },
+    {
+      "id": "chunk_26",
+      "metadata": {
+        "sección": "3.5 Empoderamiento de la Mujer - Espacios Seguros",
+        "tipo_documento": "Plan Estatal de Desarrollo 2024-2030",
+        "pagina_inicio": 110,
+        "pagina_fin": 112
+      },
+      "contenido": "Roles de liderazgo en equipos. 3.5.2.5. Objetivo específico: Identificar líderes con responsabilidad social. Líneas de Acción: Diagnósticos comunitarios; difundir historias de éxito. 3.5.2.6. Premio de liderazgo: Coordinar premio; convocatorias para nominación comunitaria. 3.5.3. Objetivo estratégico: Fortalecer espacios seguros e inclusivos. 3.5.3.1. Objetivo específico: Áreas seguras en recreación. Líneas de Acción: Adaptar infraestructura; participación femenina en diseño; áreas exclusivas. 3.5.3.2. Objetivo específico: Perspectiva de género e inclusión. Líneas de Acción: Gestionar recursos para bienestar; mantenimiento óptimo; programas desde diseño hasta implementación. 3.5.3.5. Objetivo específico: Construir espacios dirigidos a mujeres. Líneas de Acción: Infraestructura con seguridad (iluminación, vigilancia); protocolos contra acoso. 3.5.3.6. Tecnología: Espacios con tecnología de vanguardia y servicios complementarios (guarderías)."
+    },
+
+    # =========================================================================
+    # BLOQUE 9: INFORMES PRINCIPALES (Nuevo Bloque)
+    # =========================================================================
+    {
+        "id": "inf_01",
+        "metadata": { "sección": "Resumen Ejecutivo", "tipo_documento": "Informe Principal" },
+        "contenido": "[ESPACIO RESERVADO PARA EL CONTENIDO DE LOS INFORMES PRINCIPALES. POR FAVOR, PEGUE AQUÍ EL TEXTO DEL INFORME CUANDO ESTÉ DISPONIBLE.]"
     }
 ]
 
 # ---------------------------------------------------------
-# 5. GENERACIÓN DE CONTEXTO (SYSTEM PROMPT)
+# 2. CONFIGURACIÓN DEL SISTEMA
 # ---------------------------------------------------------
 def generar_contexto_sistema(datos):
     contexto = "ERES ALTIUS COBAY, UN SISTEMA DE CONSULTORÍA INTELIGENTE PARA EL COLEGIO DE BACHILLERES DEL ESTADO DE YUCATÁN.\n"
@@ -817,9 +883,10 @@ def generar_contexto_sistema(datos):
     contexto += "2. REGLAMENTO ACADÉMICO: Trámites, derechos y obligaciones de alumnos.\n"
     contexto += "3. CONTRATO COLECTIVO DE TRABAJO (CCT): Derechos sindicales y prestaciones.\n"
     contexto += "4. DIRECTORIO INSTITUCIONAL: Cargos, teléfonos y organigrama.\n"
-    contexto += "5. CALENDARIO ESCOLAR: Fechas clave de exámenes y actividades.\n"
-    contexto += "6. PLANTELES Y MATRÍCULA: Estadísticas de alumnos por plantel y semestre.\n"
-    contexto += "7. INFRAESTRUCTURA: Inventario de salones y distribución de turnos por semestre.\n\n"
+    contexto += "5. PLANTELES Y MATRÍCULA: Estadísticas de alumnos por plantel y semestre.\n"
+    contexto += "6. INFRAESTRUCTURA: Inventario de salones y distribución de turnos por semestre.\n"
+    contexto += "7. PLAN ESTATAL DE DESARROLLO 2024-2030 (Directriz 3): Educación, Cultura y Deporte, Nueva Escuela Mexicana.\n"
+    contexto += "8. INFORMES PRINCIPALES: Documentación estratégica y reportes de gestión.\n\n"
     contexto += "BASE DE CONOCIMIENTO UNIFICADA:\n"
     
     for item in datos:
@@ -833,25 +900,47 @@ def generar_contexto_sistema(datos):
     contexto += "\nINSTRUCCIONES PARA RESPONDER:\n"
     contexto += "1. IDENTIDAD: Preséntate como 'ALTIUS COBAY' si te preguntan quién eres.\n"
     contexto += "2. CLASIFICACIÓN: Identifica si la consulta es Laboral, Académica, Administrativa, Estadística o de Infraestructura.\n"
-    contexto += "3. PRECISIÓN: Usa datos exactos del bloque de Matrícula, Calendario o Infraestructura cuando se requieran cifras o fechas.\n"
+    contexto += "3. PRECISIÓN: Usa datos exactos del bloque de Matrícula o Infraestructura cuando se requieran cifras o fechas.\n"
     contexto += "4. CITA: Menciona siempre la fuente (ej. 'Según el Inventario de Infraestructura...' o 'Con base en el Reglamento Académico...').\n"
-    contexto += "5. BREVEDAD: Tus respuestas deben ser directas y concisas. No excedas las 150 palabras a menos que sea estrictamente necesario. Prioriza listas y datos duros.\n"
+    contexto += "5. BREVEDAD: Tus respuestas deben ser directas y concisas. No excedas las 150 palabras a menos que sea estrictamente necesario. Prioriza listas y datos duros. Optimiza tu respuesta para que quepa en menos de 200 palabras.\n"
     return contexto
 
+# Generar el prompt del sistema (Asegúrese de que DATOS_RAG tenga el contenido real)
 SYSTEM_PROMPT = generar_contexto_sistema(DATOS_RAG)
 
 # ---------------------------------------------------------
-# 6. CONFIGURACIÓN CLIENTE API (OPENROUTER)
+# 3. INTERFAZ DE STREAMLIT Y CLIENTE OPENROUTER
 # ---------------------------------------------------------
+st.set_page_config(page_title="ALTIUS COBAY - Consultoría", page_icon="🎓", layout="wide")
+
+# === INICIO DEL BLOQUE DE LOGO ===
+# Verificamos si el archivo existe para evitar errores si no se ha subido
+if os.path.exists("logo.png"):
+    # Creamos 3 columnas para centrar la imagen (la columna del medio es más ancha)
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        st.image("logo.png", width=200) # Ajuste el 'width' (ancho) según necesite
+# === FIN DEL BLOQUE DE LOGO ===
+
+st.title("🎓 ALTIUS COBAY")
+st.subheader("Consultoría Inteligente")
+st.markdown("**Fortaleciendo el ecosistema educativo del COBAY con Mistral Small**")
+st.markdown("---")
+
+# --- CONFIGURACIÓN SEGURA DE API KEY ---
 BASE_URL = "https://openrouter.ai/api/v1"
+
+# === MODELO DE MISTRAL ===
 MODEL_NAME = "mistralai/mistral-small-creative"
 
+# Recuperación segura de la clave desde st.secrets
 api_key = None
 try:
     api_key = st.secrets["OPENROUTER_API_KEY"]
 except (FileNotFoundError, KeyError):
     pass
 
+# Inicialización del cliente
 client = None
 if api_key:
     try:
@@ -863,93 +952,50 @@ if api_key:
         st.error(f"Error al iniciar el cliente: {e}")
 else:
     st.warning("⚠️ La API Key no está configurada. Por favor, añada 'OPENROUTER_API_KEY' en los 'Secrets' de Streamlit Cloud.")
+    st.stop()
 
-# ---------------------------------------------------------
-# 7. RENDERIZADO DEL CHAT
-# ---------------------------------------------------------
+# --- HISTORIAL Y CHAT ---
 if "messages" not in st.session_state:
-    st.session_state.messages = [{
-        "role": "assistant", 
-        "content": "¡Hola! Soy **ALTIUS**. 🎓\nEstoy listo para ayudarte con información sobre reglamentos, calendario escolar, matrícula o infraestructura del COBAY."
-    }]
+    st.session_state.messages = []
 
-# Bucle para mostrar el historial con el nuevo diseño
-for msg in st.session_state.messages:
-    if msg["role"] == "user":
-        # Usuario: Amarillo Canario (#FFEB3B) - Alineado Derecha
-        st.markdown(f"""
-        <div class="chat-row user-row">
-            <div class="chat-bubble user-bubble">
-                {msg["content"]}
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-    else:
-        # Asistente: Blanco (#FFFFFF) - Alineado Izquierda
-        st.markdown(f"""
-        <div class="chat-row bot-row">
-            <div class="chat-bubble bot-bubble">
-                {msg["content"]}
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
+# Mostrar historial
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
 
-# ---------------------------------------------------------
-# 8. LÓGICA DE INTERACCIÓN
-# ---------------------------------------------------------
-if prompt := st.chat_input("Escribe tu consulta aquí..."):
+if prompt := st.chat_input("Consulta a ALTIUS (Ej: ¿Cuántos salones tiene el plantel Acanceh? o ¿Cuándo inician clases?)"):
     
-    # 1. Mostrar mensaje del usuario inmediatamente (Amarillo)
-    st.markdown(f"""
-    <div class="chat-row user-row">
-        <div class="chat-bubble user-bubble">
-            {prompt}
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-    
+    with st.chat_message("user"):
+        st.markdown(prompt)
     st.session_state.messages.append({"role": "user", "content": prompt})
 
-    # 2. Generar respuesta
-    if client:
+    with st.chat_message("assistant"):
+        message_placeholder = st.empty()
+        full_response = ""
+        
         try:
+            # Construcción de mensajes
             messages_api = [{"role": "system", "content": SYSTEM_PROMPT}]
-            for m in st.session_state.messages:
-                messages_api.append({"role": m["role"], "content": m["content"]})
+            for msg in st.session_state.messages:
+                messages_api.append({"role": msg["role"], "content": msg["content"]})
 
+            # Llamada al modelo con LÍMITE DE TOKENS (Cost control)
             stream = client.chat.completions.create(
                 model=MODEL_NAME,
                 messages=messages_api,
                 stream=True,
                 temperature=0.3,
-                max_tokens=350
+                max_tokens=300  # <--- Límite duro para controlar costos
             )
-
-            response_placeholder = st.empty()
-            full_response = ""
-
-            # Streaming de la respuesta (Blanco)
+            
             for chunk in stream:
                 if chunk.choices[0].delta.content:
-                    full_response += chunk.choices[0].delta.content
-                    response_placeholder.markdown(f"""
-                    <div class="chat-row bot-row">
-                        <div class="chat-bubble bot-bubble">
-                            {full_response} ▌
-                        </div>
-                    </div>
-                    """, unsafe_allow_html=True)
+                    content = chunk.choices[0].delta.content
+                    full_response += content
+                    message_placeholder.markdown(full_response + "▌")
             
-            # Resultado final sin cursor
-            response_placeholder.markdown(f"""
-            <div class="chat-row bot-row">
-                <div class="chat-bubble bot-bubble">
-                    {full_response}
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
-            
+            message_placeholder.markdown(full_response)
             st.session_state.messages.append({"role": "assistant", "content": full_response})
 
         except Exception as e:
-            st.error(f"Error en la comunicación con el modelo: {e}")
+            st.error(f"Error técnico en el sistema ALTIUS: {e}")
