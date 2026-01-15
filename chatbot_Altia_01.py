@@ -5,7 +5,7 @@ import os
 # ---------------------------------------------------------
 # 1. CONFIGURACIÓN DE PÁGINA
 # ---------------------------------------------------------
-st.set_page_config(page_title="ALTIUS COBAY", page_icon="🎓", layout="wide")
+st.set_page_config(page_title="ALTIA COBAY", page_icon="🎓", layout="wide")
 
 # ---------------------------------------------------------
 # 2. ESTILOS CSS (FRONTEND PERSONALIZADO)
@@ -123,14 +123,14 @@ st.markdown("""
 <div class="whatsapp-header">
     <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png" alt="Profile">
     <div>
-        <h1>ALTIUS COBAY</h1>
+        <h1>ALTIA COBAY</h1>
         <div class="status">● En línea | Consultoría Inteligente</div>
     </div>
 </div>
 """, unsafe_allow_html=True)
 
 # ---------------------------------------------------------
-# 4. BASE DE CONOCIMIENTO MAESTRA DE ALTIUS COBAY
+# 4. BASE DE CONOCIMIENTO MAESTRA DE ALTIA COBAY
 # ---------------------------------------------------------
 DATOS_RAG = [
     # =========================================================================
@@ -1004,8 +1004,8 @@ DATOS_RAG = [
 # 5. GENERACIÓN DE CONTEXTO (SYSTEM PROMPT)
 # ---------------------------------------------------------
 def generar_contexto_sistema(datos):
-    contexto = "ERES ALTIUS COBAY, UN SISTEMA DE CONSULTORÍA INTELIGENTE PARA EL COLEGIO DE BACHILLERES DEL ESTADO DE YUCATÁN.\n"
-    contexto += "Tu misión es fortalecer el ecosistema educativo proporcionando respuestas precisas basadas en la siguiente documentación oficial:\n\n"
+    contexto = "ERES ALTIA , UN SISTEMA DE CONSULTORÍA EDUCATIVA INTELIGENTE.\n"
+    contexto += "Tu misión es fortalecer la gestión estratégica institucional considerando la siguiente documentación oficial:\n\n"
     contexto += "1. REGLAMENTO INTERIOR DE TRABAJO (RIT): Obligaciones, disciplina y condiciones laborales.\n"
     contexto += "2. REGLAMENTO ACADÉMICO: Trámites, derechos y obligaciones de alumnos.\n"
     contexto += "3. CONTRATO COLECTIVO DE TRABAJO (CCT): Derechos sindicales y prestaciones.\n"
@@ -1026,7 +1026,7 @@ def generar_contexto_sistema(datos):
         contexto += f"{contenido}\n\n"
     
     contexto += "\nINSTRUCCIONES PARA RESPONDER:\n"
-    contexto += "1. IDENTIDAD: Preséntate como 'ALTIUS COBAY' si te preguntan quién eres.\n"
+    contexto += "1. IDENTIDAD: Preséntate como 'ALTIA COBAY' si te preguntan quién eres.\n"
     contexto += "2. CLASIFICACIÓN: Identifica si la consulta es Laboral, Académica, Administrativa, Estadística o de Infraestructura.\n"
     contexto += "3. PRECISIÓN: Usa datos exactos del bloque de Matrícula, Calendario o Infraestructura cuando se requieran cifras o fechas.\n"
     contexto += "4. CITA: Menciona siempre la fuente (ej. 'Según el Inventario de Infraestructura...' o 'Con base en el Reglamento Académico...').\n"
@@ -1080,7 +1080,7 @@ else:
 if "messages" not in st.session_state:
     st.session_state.messages = [{
         "role": "assistant", 
-        "content": "¡Hola! Soy **ALTIUS**. 🎓\nEstoy listo para ayudarte con información sobre reglamentos, plan estatal, matrícula o infraestructura del COBAY."
+        "content": "¡Hola! Soy **ALTIA**. 🎓\nEstoy listo para ayudarte con información sobre reglamentos, plan estatal, matrícula o infraestructura del COBAY."
     }]
 
 # Bucle para mostrar el historial con el nuevo diseño
@@ -1163,3 +1163,4 @@ if prompt := st.chat_input("Escribe tu consulta aquí..."):
 
         except Exception as e:
             st.error(f"Error en la comunicación con el modelo: {e}")
+
