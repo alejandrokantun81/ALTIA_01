@@ -924,8 +924,17 @@ if os.path.exists("logo.png"):
 
 st.title("🎓 ALTIUS COBAY")
 st.subheader("Consultoría Inteligente")
-st.markdown("**Fortaleciendo el ecosistema educativo del COBAY con Mistral Small**")
+st.markdown("**Fortaleciendo el ecosistema educativo del COBAY**")
 st.markdown("---")
+
+# === SIDEBAR (Restaurado) ===
+with st.sidebar:
+    st.header("Configuración")
+    if os.path.exists("logo.png"):
+        st.image("logo.png", width=100)
+    
+    api_key_input = st.text_input("OpenRouter API Key", type="password", help="Ingrese su clave aquí si no está configurada en Secrets.")
+    st.caption("ALTIUS requiere credenciales para operar.")
 
 # --- CONFIGURACIÓN SEGURA DE API KEY ---
 BASE_URL = "https://openrouter.ai/api/v1"
@@ -933,12 +942,14 @@ BASE_URL = "https://openrouter.ai/api/v1"
 # === MODELO DE MISTRAL ===
 MODEL_NAME = "mistralai/mistral-small-creative"
 
-# Recuperación segura de la clave desde st.secrets
-api_key = None
-try:
-    api_key = st.secrets["OPENROUTER_API_KEY"]
-except (FileNotFoundError, KeyError):
-    pass
+# Lógica de Selección de Clave: Prioriza Input Manual, luego Secrets
+api_key = api_key_input
+
+if not api_key:
+    try:
+        api_key = st.secrets["OPENROUTER_API_KEY"]
+    except (FileNotFoundError, KeyError):
+        pass
 
 # Inicialización del cliente
 client = None
@@ -951,7 +962,7 @@ if api_key:
     except Exception as e:
         st.error(f"Error al iniciar el cliente: {e}")
 else:
-    st.warning("⚠️ La API Key no está configurada. Por favor, añada 'OPENROUTER_API_KEY' en los 'Secrets' de Streamlit Cloud.")
+    st.warning("⚠️ La API Key no está configurada. Por favor, ingrésela en la barra lateral o configure 'OPENROUTER_API_KEY' en los 'Secrets' de Streamlit Cloud.")
     st.stop()
 
 # --- HISTORIAL Y CHAT ---
