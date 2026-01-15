@@ -66,7 +66,7 @@ st.markdown("""
         color: #FFEB3B; /* Texto Amarillo Canario para el estado */
     }
     
-    /* Ajuste del contenedor principal para que no quede oculto por el header */
+    /* Ajuste del contenedor principal */
     .block-container {
         padding-top: 90px !important;
         padding-bottom: 120px !important;
@@ -590,6 +590,44 @@ DATOS_RAG = [
         60. TELCHAC PUEBLO: 127 alumnos (1º:53, 3º:33, 5º:41).
         """
     },
+    {
+        "id": "mat_03",
+        "metadata": { "sección": "Planteles 61-78 y Segundo Grupo", "tipo_documento": "Matrícula 2025-B" },
+        "contenido": """
+        DETALLE PLANTELES (ID 61-78):
+        61. TEMAX: 233 alumnos (1º:85, 3º:77, 5º:71).
+        62. TEPAKAM: 83 alumnos (1º:31, 3º:25, 5º:27).
+        63. TICOPO: 213 alumnos (1º:87, 3º:68, 5º:58).
+        64. TICUL: 800 alumnos (1º:308, 3º:249, 5º:243).
+        65. TIMUCUY: 157 alumnos (1º:71, 3º:42, 5º:44).
+        66. TIXMEHUAC: 162 alumnos (1º:54, 3º:58, 5º:50).
+        67. TIZIMIN: 681 alumnos (1º:276, 3º:223, 5º:182).
+        68. TUNKAS: 120 alumnos (1º:52, 3º:33, 5º:35).
+        69. TZUCACAB: 391 alumnos (1º:158, 3º:120, 5º:113).
+        70. UAYMA: 158 alumnos (1º:57, 3º:50, 5º:51).
+        71. UCU: 157 alumnos (1º:58, 3º:58, 5º:41).
+        72. UMAN: 741 alumnos (1º:298, 3º:221, 5º:222).
+        73. VALLADOLID: 851 alumnos (1º:286, 3º:287, 5º:278).
+        74. XOCCHEL: 193 alumnos (1º:74, 3º:61, 5º:58).
+        75. X-MATKUIL: 1702 alumnos (1º:580, 3º:535, 5º:587).
+        76. YAXCABÁ: 202 alumnos (1º:82, 3º:63, 5º:57).
+        77. YAXKUKUL: 168 alumnos (1º:67, 3º:52, 5º:49).
+        78. YOBAIN: 93 alumnos (1º:35, 3º:29, 5º:29).
+
+        SEGUNDO GRUPO DE PLANTELES/CENTROS:
+        1. BECAL: 143 alumnos (1º:66, 3º:41, 5º:36).
+        2. CELESTUN: 126 alumnos (1º:49, 3º:44, 5º:33).
+        3. CHIKINDZONOT: 150 alumnos (1º:63, 3º:45, 5º:42).
+        4. DZITYA: 124 alumnos (1º:48, 3º:41, 5º:35).
+        5. DZONOT CARRETERO: 85 alumnos (1º:29, 3º:24, 5º:32).
+        6. KAUA: 166 alumnos (1º:69, 3º:51, 5º:46).
+        7. PISTE: 253 alumnos (1º:85, 3º:80, 5º:88).
+        8. POPOLNAH: 93 alumnos (1º:45, 3º:32, 5º:16).
+        9. TIXCACALCUPUL: 176 alumnos (1º:63, 3º:58, 5º:55).
+        10. TIXCANCAL: 125 alumnos (1º:44, 3º:35, 5º:46).
+        11. XCAN: 203 alumnos (1º:75, 3º:67, 5º:61).
+        """
+    },
 
     # =========================================================================
     # BLOQUE 7: INFRAESTRUCTURA (Inventario de Salones y Turnos)
@@ -990,7 +1028,7 @@ def generar_contexto_sistema(datos):
     contexto += "\nINSTRUCCIONES PARA RESPONDER:\n"
     contexto += "1. IDENTIDAD: Preséntate como 'ALTIUS COBAY' si te preguntan quién eres.\n"
     contexto += "2. CLASIFICACIÓN: Identifica si la consulta es Laboral, Académica, Administrativa, Estadística o de Infraestructura.\n"
-    contexto += "3. PRECISIÓN: Usa datos exactos del bloque de Matrícula o Infraestructura cuando se requieran cifras o fechas.\n"
+    contexto += "3. PRECISIÓN: Usa datos exactos del bloque de Matrícula, Calendario o Infraestructura cuando se requieran cifras o fechas.\n"
     contexto += "4. CITA: Menciona siempre la fuente (ej. 'Según el Inventario de Infraestructura...' o 'Con base en el Reglamento Académico...').\n"
     contexto += "5. BREVEDAD: Tus respuestas deben ser directas y concisas. No excedas las 150 palabras a menos que sea estrictamente necesario. Prioriza listas y datos duros.\n"
     return contexto
@@ -1003,24 +1041,27 @@ SYSTEM_PROMPT = generar_contexto_sistema(DATOS_RAG)
 BASE_URL = "https://openrouter.ai/api/v1"
 MODEL_NAME = "mistralai/mistral-small-creative"
 
-# === LOGO SIDEBAR (Opcional si usas el Header HTML) ===
-# Se mantiene por si se quiere volver al layout estándar
-api_key_input = None
+# === SIDEBAR INTELIGENTE (Modificado) ===
 with st.sidebar:
     st.header("Configuración")
+    
+    # Logo
     if os.path.exists("logo.png"):
         st.image("logo.png", width=100)
-    api_key_input = st.text_input("OpenRouter API Key", type="password", help="Ingrese su clave aquí si no está configurada en Secrets.")
-    st.caption("ALTIUS requiere credenciales para operar.")
-
-# Lógica de Selección de Clave: Prioriza Input Manual, luego Secrets
-api_key = api_key_input
-if not api_key:
-    try:
+    
+    # Lógica de Clave:
+    # 1. Busca en Secrets (Backend)
+    # 2. Si no existe, muestra el Input (Frontend)
+    
+    if "OPENROUTER_API_KEY" in st.secrets:
+        st.success("✅ Sistema Conectado")
+        st.caption("Licencia activa vía Secrets")
         api_key = st.secrets["OPENROUTER_API_KEY"]
-    except (FileNotFoundError, KeyError):
-        pass
+    else:
+        api_key = st.text_input("OpenRouter API Key", type="password")
+        st.caption("⚠️ Ingrese su clave para operar.")
 
+# Inicialización del cliente
 client = None
 if api_key:
     try:
@@ -1031,7 +1072,7 @@ if api_key:
     except Exception as e:
         st.error(f"Error al iniciar el cliente: {e}")
 else:
-    st.warning("⚠️ La API Key no está configurada. Por favor, añada 'OPENROUTER_API_KEY' en los 'Secrets' de Streamlit Cloud.")
+    st.warning("⚠️ La API Key no está configurada. Por favor, ingrésela en la barra lateral o configure 'OPENROUTER_API_KEY' en los 'Secrets' de Streamlit Cloud.")
 
 # ---------------------------------------------------------
 # 7. RENDERIZADO DEL CHAT
