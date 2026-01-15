@@ -3,7 +3,134 @@ from openai import OpenAI
 import os
 
 # ---------------------------------------------------------
-# 1. BASE DE CONOCIMIENTO MAESTRA DE ALTIUS COBAY
+# 1. CONFIGURACIÓN DE PÁGINA
+# ---------------------------------------------------------
+st.set_page_config(page_title="ALTIUS COBAY", page_icon="🎓", layout="wide")
+
+# ---------------------------------------------------------
+# 2. ESTILOS CSS (FRONTEND PERSONALIZADO)
+# ---------------------------------------------------------
+st.markdown("""
+<style>
+    /* 1. Fondo general de la aplicación: NEGRO (Grafito Oscuro con Textura) */
+    .stApp {
+        background-color: #121212;
+        background-image: linear-gradient(30deg, #1a1a1a 12%, transparent 12.5%, transparent 87%, #1a1a1a 87.5%, #1a1a1a),
+        linear-gradient(150deg, #1a1a1a 12%, transparent 12.5%, transparent 87%, #1a1a1a 87.5%, #1a1a1a),
+        linear-gradient(30deg, #1a1a1a 12%, transparent 12.5%, transparent 87%, #1a1a1a 87.5%, #1a1a1a),
+        linear-gradient(150deg, #1a1a1a 12%, transparent 12.5%, transparent 87%, #1a1a1a 87.5%, #1a1a1a),
+        linear-gradient(60deg, #222222 25%, transparent 25.5%, transparent 75%, #222222 75%, #222222),
+        linear-gradient(60deg, #222222 25%, transparent 25.5%, transparent 75%, #222222 75%, #222222);
+        background-size: 80px 140px;
+        background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;
+    }
+
+    /* 2. Ocultar elementos nativos de Streamlit */
+    header {visibility: hidden;}
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+
+    /* 3. Encabezado Personalizado: GUINDA */
+    .whatsapp-header {
+        background-color: #8A1538; /* Guinda Institucional */
+        padding: 15px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 999;
+        display: flex;
+        align-items: center;
+        color: white;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        border-bottom: 2px solid #FFD700; /* Línea sutil amarilla */
+    }
+    .whatsapp-header img {
+        border-radius: 50%;
+        width: 45px;
+        height: 45px;
+        margin-left: 20px;
+        margin-right: 15px;
+        border: 2px solid white;
+    }
+    .whatsapp-header h1 {
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 22px;
+        margin: 0;
+        color: #FFFFFF; /* Texto Blanco */
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+    .whatsapp-header .status {
+        font-size: 12px; 
+        color: #FFEB3B; /* Texto Amarillo Canario para el estado */
+    }
+    
+    /* Ajuste del contenedor principal para que no quede oculto por el header */
+    .block-container {
+        padding-top: 90px !important;
+        padding-bottom: 120px !important;
+    }
+
+    /* 4. Estructura de Mensajes */
+    .chat-row {
+        display: flex;
+        margin-bottom: 15px;
+        width: 100%;
+    }
+    
+    .user-row {
+        justify-content: flex-end; 
+    }
+    
+    .bot-row {
+        justify-content: flex-start; 
+    }
+
+    .chat-bubble {
+        padding: 12px 18px;
+        border-radius: 12px;
+        max-width: 75%;
+        font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+        font-size: 16px;
+        line-height: 1.5;
+        position: relative;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    }
+
+    /* Burbuja del Usuario: AMARILLO CANARIO */
+    .user-bubble {
+        background-color: #FFEB3B; /* Amarillo Canario Intenso */
+        color: #000000; /* Texto Negro para contraste */
+        border-top-right-radius: 0;
+        border: 1px solid #FBC02D;
+    }
+
+    /* Burbuja del Bot: BLANCO */
+    .bot-bubble {
+        background-color: #FFFFFF; /* Blanco Puro */
+        color: #000000; /* Texto Negro */
+        border-top-left-radius: 0;
+        border: 1px solid #E0E0E0;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+# ---------------------------------------------------------
+# 3. HEADER VISUAL (HTML)
+# ---------------------------------------------------------
+st.markdown("""
+<div class="whatsapp-header">
+    <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png" alt="Profile">
+    <div>
+        <h1>ALTIUS COBAY</h1>
+        <div class="status">● En línea | Consultoría Inteligente</div>
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
+# ---------------------------------------------------------
+# 4. BASE DE CONOCIMIENTO MAESTRA DE ALTIUS COBAY
 # ---------------------------------------------------------
 DATOS_RAG = [
     # =========================================================================
@@ -463,44 +590,6 @@ DATOS_RAG = [
         60. TELCHAC PUEBLO: 127 alumnos (1º:53, 3º:33, 5º:41).
         """
     },
-    {
-        "id": "mat_03",
-        "metadata": { "sección": "Planteles 61-78 y Segundo Grupo", "tipo_documento": "Matrícula 2025-B" },
-        "contenido": """
-        DETALLE PLANTELES (ID 61-78):
-        61. TEMAX: 233 alumnos (1º:85, 3º:77, 5º:71).
-        62. TEPAKAM: 83 alumnos (1º:31, 3º:25, 5º:27).
-        63. TICOPO: 213 alumnos (1º:87, 3º:68, 5º:58).
-        64. TICUL: 800 alumnos (1º:308, 3º:249, 5º:243).
-        65. TIMUCUY: 157 alumnos (1º:71, 3º:42, 5º:44).
-        66. TIXMEHUAC: 162 alumnos (1º:54, 3º:58, 5º:50).
-        67. TIZIMIN: 681 alumnos (1º:276, 3º:223, 5º:182).
-        68. TUNKAS: 120 alumnos (1º:52, 3º:33, 5º:35).
-        69. TZUCACAB: 391 alumnos (1º:158, 3º:120, 5º:113).
-        70. UAYMA: 158 alumnos (1º:57, 3º:50, 5º:51).
-        71. UCU: 157 alumnos (1º:58, 3º:58, 5º:41).
-        72. UMAN: 741 alumnos (1º:298, 3º:221, 5º:222).
-        73. VALLADOLID: 851 alumnos (1º:286, 3º:287, 5º:278).
-        74. XOCCHEL: 193 alumnos (1º:74, 3º:61, 5º:58).
-        75. X-MATKUIL: 1702 alumnos (1º:580, 3º:535, 5º:587).
-        76. YAXCABÁ: 202 alumnos (1º:82, 3º:63, 5º:57).
-        77. YAXKUKUL: 168 alumnos (1º:67, 3º:52, 5º:49).
-        78. YOBAIN: 93 alumnos (1º:35, 3º:29, 5º:29).
-
-        SEGUNDO GRUPO DE PLANTELES/CENTROS:
-        1. BECAL: 143 alumnos (1º:66, 3º:41, 5º:36).
-        2. CELESTUN: 126 alumnos (1º:49, 3º:44, 5º:33).
-        3. CHIKINDZONOT: 150 alumnos (1º:63, 3º:45, 5º:42).
-        4. DZITYA: 124 alumnos (1º:48, 3º:41, 5º:35).
-        5. DZONOT CARRETERO: 85 alumnos (1º:29, 3º:24, 5º:32).
-        6. KAUA: 166 alumnos (1º:69, 3º:51, 5º:46).
-        7. PISTE: 253 alumnos (1º:85, 3º:80, 5º:88).
-        8. POPOLNAH: 93 alumnos (1º:45, 3º:32, 5º:16).
-        9. TIXCACALCUPUL: 176 alumnos (1º:63, 3º:58, 5º:55).
-        10. TIXCANCAL: 125 alumnos (1º:44, 3º:35, 5º:46).
-        11. XCAN: 203 alumnos (1º:75, 3º:67, 5º:61).
-        """
-    },
 
     # =========================================================================
     # BLOQUE 7: INFRAESTRUCTURA (Inventario de Salones y Turnos)
@@ -874,7 +963,7 @@ DATOS_RAG = [
 ]
 
 # ---------------------------------------------------------
-# 2. CONFIGURACIÓN DEL SISTEMA
+# 5. GENERACIÓN DE CONTEXTO (SYSTEM PROMPT)
 # ---------------------------------------------------------
 def generar_contexto_sistema(datos):
     contexto = "ERES ALTIUS COBAY, UN SISTEMA DE CONSULTORÍA INTELIGENTE PARA EL COLEGIO DE BACHILLERES DEL ESTADO DE YUCATÁN.\n"
@@ -883,10 +972,11 @@ def generar_contexto_sistema(datos):
     contexto += "2. REGLAMENTO ACADÉMICO: Trámites, derechos y obligaciones de alumnos.\n"
     contexto += "3. CONTRATO COLECTIVO DE TRABAJO (CCT): Derechos sindicales y prestaciones.\n"
     contexto += "4. DIRECTORIO INSTITUCIONAL: Cargos, teléfonos y organigrama.\n"
-    contexto += "5. PLANTELES Y MATRÍCULA: Estadísticas de alumnos por plantel y semestre.\n"
-    contexto += "6. INFRAESTRUCTURA: Inventario de salones y distribución de turnos por semestre.\n"
-    contexto += "7. PLAN ESTATAL DE DESARROLLO 2024-2030 (Directriz 3): Educación, Cultura y Deporte, Nueva Escuela Mexicana.\n"
-    contexto += "8. INFORMES PRINCIPALES: Documentación estratégica y reportes de gestión.\n\n"
+    contexto += "5. CALENDARIO ESCOLAR: Fechas clave de exámenes y actividades.\n"
+    contexto += "6. PLANTELES Y MATRÍCULA: Estadísticas de alumnos por plantel y semestre.\n"
+    contexto += "7. INFRAESTRUCTURA: Inventario de salones y distribución de turnos por semestre.\n"
+    contexto += "8. PLAN ESTATAL DE DESARROLLO 2024-2030 (Directriz 3): Educación, Cultura y Deporte, Nueva Escuela Mexicana.\n"
+    contexto += "9. INFORMES PRINCIPALES: Documentación estratégica y reportes de gestión.\n\n"
     contexto += "BASE DE CONOCIMIENTO UNIFICADA:\n"
     
     for item in datos:
@@ -902,56 +992,35 @@ def generar_contexto_sistema(datos):
     contexto += "2. CLASIFICACIÓN: Identifica si la consulta es Laboral, Académica, Administrativa, Estadística o de Infraestructura.\n"
     contexto += "3. PRECISIÓN: Usa datos exactos del bloque de Matrícula o Infraestructura cuando se requieran cifras o fechas.\n"
     contexto += "4. CITA: Menciona siempre la fuente (ej. 'Según el Inventario de Infraestructura...' o 'Con base en el Reglamento Académico...').\n"
-    contexto += "5. BREVEDAD: Tus respuestas deben ser directas y concisas. No excedas las 150 palabras a menos que sea estrictamente necesario. Prioriza listas y datos duros. Optimiza tu respuesta para que quepa en menos de 200 palabras.\n"
+    contexto += "5. BREVEDAD: Tus respuestas deben ser directas y concisas. No excedas las 150 palabras a menos que sea estrictamente necesario. Prioriza listas y datos duros.\n"
     return contexto
 
-# Generar el prompt del sistema (Asegúrese de que DATOS_RAG tenga el contenido real)
 SYSTEM_PROMPT = generar_contexto_sistema(DATOS_RAG)
 
 # ---------------------------------------------------------
-# 3. INTERFAZ DE STREAMLIT Y CLIENTE OPENROUTER
+# 6. CONFIGURACIÓN CLIENTE API (OPENROUTER)
 # ---------------------------------------------------------
-st.set_page_config(page_title="ALTIUS COBAY - Consultoría", page_icon="🎓", layout="wide")
+BASE_URL = "https://openrouter.ai/api/v1"
+MODEL_NAME = "mistralai/mistral-small-creative"
 
-# === INICIO DEL BLOQUE DE LOGO ===
-# Verificamos si el archivo existe para evitar errores si no se ha subido
-if os.path.exists("logo.png"):
-    # Creamos 3 columnas para centrar la imagen (la columna del medio es más ancha)
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        st.image("logo.png", width=200) # Ajuste el 'width' (ancho) según necesite
-# === FIN DEL BLOQUE DE LOGO ===
-
-st.title("🎓 ALTIUS COBAY")
-st.subheader("Consultoría Inteligente")
-st.markdown("**Fortaleciendo el ecosistema educativo del COBAY**")
-st.markdown("---")
-
-# === SIDEBAR (Restaurado) ===
+# === LOGO SIDEBAR (Opcional si usas el Header HTML) ===
+# Se mantiene por si se quiere volver al layout estándar
+api_key_input = None
 with st.sidebar:
     st.header("Configuración")
     if os.path.exists("logo.png"):
         st.image("logo.png", width=100)
-    
     api_key_input = st.text_input("OpenRouter API Key", type="password", help="Ingrese su clave aquí si no está configurada en Secrets.")
     st.caption("ALTIUS requiere credenciales para operar.")
 
-# --- CONFIGURACIÓN SEGURA DE API KEY ---
-BASE_URL = "https://openrouter.ai/api/v1"
-
-# === MODELO DE MISTRAL ===
-MODEL_NAME = "mistralai/mistral-small-creative"
-
 # Lógica de Selección de Clave: Prioriza Input Manual, luego Secrets
 api_key = api_key_input
-
 if not api_key:
     try:
         api_key = st.secrets["OPENROUTER_API_KEY"]
     except (FileNotFoundError, KeyError):
         pass
 
-# Inicialización del cliente
 client = None
 if api_key:
     try:
@@ -962,51 +1031,94 @@ if api_key:
     except Exception as e:
         st.error(f"Error al iniciar el cliente: {e}")
 else:
-    st.warning("⚠️ La API Key no está configurada. Por favor, ingrésela en la barra lateral o configure 'OPENROUTER_API_KEY' en los 'Secrets' de Streamlit Cloud.")
-    st.stop()
+    st.warning("⚠️ La API Key no está configurada. Por favor, añada 'OPENROUTER_API_KEY' en los 'Secrets' de Streamlit Cloud.")
 
-# --- HISTORIAL Y CHAT ---
+# ---------------------------------------------------------
+# 7. RENDERIZADO DEL CHAT
+# ---------------------------------------------------------
 if "messages" not in st.session_state:
-    st.session_state.messages = []
+    st.session_state.messages = [{
+        "role": "assistant", 
+        "content": "¡Hola! Soy **ALTIUS**. 🎓\nEstoy listo para ayudarte con información sobre reglamentos, plan estatal, matrícula o infraestructura del COBAY."
+    }]
 
-# Mostrar historial
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"])
+# Bucle para mostrar el historial con el nuevo diseño
+for msg in st.session_state.messages:
+    if msg["role"] == "user":
+        # Usuario: Amarillo Canario (#FFEB3B) - Alineado Derecha
+        st.markdown(f"""
+        <div class="chat-row user-row">
+            <div class="chat-bubble user-bubble">
+                {msg["content"]}
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+    else:
+        # Asistente: Blanco (#FFFFFF) - Alineado Izquierda
+        st.markdown(f"""
+        <div class="chat-row bot-row">
+            <div class="chat-bubble bot-bubble">
+                {msg["content"]}
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
-if prompt := st.chat_input("Consulta a ALTIUS (Ej: ¿Cuántos salones tiene el plantel Acanceh? o ¿Cuándo inician clases?)"):
+# ---------------------------------------------------------
+# 8. LÓGICA DE INTERACCIÓN
+# ---------------------------------------------------------
+if prompt := st.chat_input("Escribe tu consulta aquí..."):
     
-    with st.chat_message("user"):
-        st.markdown(prompt)
+    # 1. Mostrar mensaje del usuario inmediatamente (Amarillo)
+    st.markdown(f"""
+    <div class="chat-row user-row">
+        <div class="chat-bubble user-bubble">
+            {prompt}
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
     st.session_state.messages.append({"role": "user", "content": prompt})
 
-    with st.chat_message("assistant"):
-        message_placeholder = st.empty()
-        full_response = ""
-        
+    # 2. Generar respuesta
+    if client:
         try:
-            # Construcción de mensajes
             messages_api = [{"role": "system", "content": SYSTEM_PROMPT}]
-            for msg in st.session_state.messages:
-                messages_api.append({"role": msg["role"], "content": msg["content"]})
+            for m in st.session_state.messages:
+                messages_api.append({"role": m["role"], "content": m["content"]})
 
-            # Llamada al modelo con LÍMITE DE TOKENS (Cost control)
             stream = client.chat.completions.create(
                 model=MODEL_NAME,
                 messages=messages_api,
                 stream=True,
                 temperature=0.3,
-                max_tokens=300  # <--- Límite duro para controlar costos
+                max_tokens=350
             )
-            
+
+            response_placeholder = st.empty()
+            full_response = ""
+
+            # Streaming de la respuesta (Blanco)
             for chunk in stream:
                 if chunk.choices[0].delta.content:
-                    content = chunk.choices[0].delta.content
-                    full_response += content
-                    message_placeholder.markdown(full_response + "▌")
+                    full_response += chunk.choices[0].delta.content
+                    response_placeholder.markdown(f"""
+                    <div class="chat-row bot-row">
+                        <div class="chat-bubble bot-bubble">
+                            {full_response} ▌
+                        </div>
+                    </div>
+                    """, unsafe_allow_html=True)
             
-            message_placeholder.markdown(full_response)
+            # Resultado final sin cursor
+            response_placeholder.markdown(f"""
+            <div class="chat-row bot-row">
+                <div class="chat-bubble bot-bubble">
+                    {full_response}
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+            
             st.session_state.messages.append({"role": "assistant", "content": full_response})
 
         except Exception as e:
-            st.error(f"Error técnico en el sistema ALTIUS: {e}")
+            st.error(f"Error en la comunicación con el modelo: {e}")
