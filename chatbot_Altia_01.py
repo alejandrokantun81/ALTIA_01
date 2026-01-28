@@ -1036,32 +1036,32 @@ def generar_contexto_sistema(datos):
 SYSTEM_PROMPT = generar_contexto_sistema(DATOS_RAG)
 
 # ---------------------------------------------------------
+# ---------------------------------------------------------
 # 6. CONFIGURACIÓN CLIENTE API (OPENROUTER)
 # ---------------------------------------------------------
 BASE_URL = "https://openrouter.ai/api/v1"
-MODEL_NAME = "mistralai/mistral-small-creative"
+# Actualización del identificador del modelo para KIMI 2.5
+MODEL_NAME = "moonshotai/kimi-2.5"
 
-# === SIDEBAR INTELIGENTE (Modificado) ===
+# === SIDEBAR INTELIGENTE ===
 with st.sidebar:
     st.header("Configuración")
     
-    # Logo
     if os.path.exists("logo.png"):
         st.image("logo.png", width=100)
     
-    # Lógica de Clave:
-    # 1. Busca en Secrets (Backend)
-    # 2. Si no existe, muestra el Input (Frontend)
+    # Priorización de la clave proporcionada por el usuario
+    api_key_input = "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"
     
     if "OPENROUTER_API_KEY" in st.secrets:
         st.success("✅ Sistema Conectado")
-        st.caption("Licencia activa vía Secrets")
         api_key = st.secrets["OPENROUTER_API_KEY"]
     else:
-        api_key = st.text_input("OpenRouter API Key", type="password")
-        st.caption("⚠️ Ingrese su clave para operar.")
+        # Uso de la clave proporcionada en el prompt
+        api_key = api_key_input
+        st.info("Utilizando API Key configurada manualmente.")
 
-# Inicialización del cliente
+# Inicialización del cliente con los nuevos parámetros
 client = None
 if api_key:
     try:
@@ -1071,9 +1071,6 @@ if api_key:
         )
     except Exception as e:
         st.error(f"Error al iniciar el cliente: {e}")
-else:
-    st.warning("⚠️ La API Key no está configurada. Por favor, ingrésela en la barra lateral o configure 'OPENROUTER_API_KEY' en los 'Secrets' de Streamlit Cloud.")
-
 # ---------------------------------------------------------
 # 7. RENDERIZADO DEL CHAT
 # ---------------------------------------------------------
@@ -1163,4 +1160,5 @@ if prompt := st.chat_input("Escribe tu consulta aquí..."):
 
         except Exception as e:
             st.error(f"Error en la comunicación con el modelo: {e}")
+
 
