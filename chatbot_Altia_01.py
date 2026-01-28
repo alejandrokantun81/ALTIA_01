@@ -1040,7 +1040,7 @@ SYSTEM_PROMPT = generar_contexto_sistema(DATOS_RAG)
 # 6. CONFIGURACIÓN CLIENTE API (OPENROUTER)
 # ---------------------------------------------------------
 BASE_URL = "https://openrouter.ai/api/v1"
-# Actualización del identificador del modelo a KIMI k2.5
+# Actualización del identificador del modelo solicitado
 MODEL_NAME = "moonshotai/kimi-k2:free"
 
 # === SIDEBAR INTELIGENTE ===
@@ -1160,4 +1160,3 @@ if prompt := st.chat_input("Escribe tu consulta aquí..."):
 
         except Exception as e:
             st.error(f"Error en la comunicación con el modelo: {e}")
-
