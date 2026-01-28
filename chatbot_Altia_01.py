@@ -433,24 +433,24 @@ DATOS_RAG = [
         "metadata": { "sección": "Dirección General y Staff", "tipo_documento": "Directorio Institucional" },
         "contenido": """
         DIRECTORIO DE AUTORIDADES DEL COBAY:
-         
+          
         1. DIRECCIÓN GENERAL
            - Titular: Mtro. Didier Manuel De Jesús Barrera Novelo (Director General).
            - Dirección: Calle 34 núm. 420-B x 35, Col. López Mateos, Mérida.
            - Teléfono: (999) 611 8690 Ext. 28051 y 28052.
-         
+          
         2. UNIDAD DE VINCULACIÓN
            - Titular: Ing. Manuel Alberto Bonilla Campo (Jefe de Unidad).
            - Teléfono: Ext. 28091.
-         
+          
         3. COMUNICACIÓN SOCIAL
            - Titular: Lic. Martín Rodrigo Kauil Conde (Jefe de Departamento).
            - Teléfono: Ext. 28007.
-         
+          
         4. RELACIONES PÚBLICAS
            - Titular: Lic. Oswaldo Cardeña Medina (Jefe de Departamento).
            - Teléfono: Ext. 28007.
-         
+          
         5. DIRECCIÓN JURÍDICA
            - Titular: Mtro. David Alejandro Patrón Bianchi (Director Jurídico).
            - Teléfono: Ext. 28044 y 28045.
@@ -991,7 +991,7 @@ DATOS_RAG = [
     },
 
     # =========================================================================
-    # BLOQUE 9: INFORMES PRINCIPALES (Nuevo Bloque)
+    # BLOQUE 9: INFORMES PRINCIPALES
     # =========================================================================
     {
         "id": "inf_01",
@@ -1016,15 +1016,15 @@ def generar_contexto_sistema(datos):
     contexto += "8. PLAN ESTATAL DE DESARROLLO 2024-2030 (Directriz 3): Educación, Cultura y Deporte, Nueva Escuela Mexicana.\n"
     contexto += "9. INFORMES PRINCIPALES: Documentación estratégica y reportes de gestión.\n\n"
     contexto += "BASE DE CONOCIMIENTO UNIFICADA:\n"
-    
+     
     for item in datos:
         tipo_doc = item['metadata'].get('tipo_documento', 'Documento General')
         seccion = item['metadata']['sección']
         contenido = item['contenido']
-        
+         
         contexto += f"--- [{tipo_doc}] SECCIÓN: {seccion} ---\n"
         contexto += f"{contenido}\n\n"
-    
+     
     contexto += "\nINSTRUCCIONES PARA RESPONDER:\n"
     contexto += "1. IDENTIDAD: Preséntate como 'ALTIA COBAY' si te preguntan quién eres.\n"
     contexto += "2. CLASIFICACIÓN: Identifica si la consulta es Laboral, Académica, Administrativa, Estadística o de Infraestructura.\n"
@@ -1040,8 +1040,8 @@ SYSTEM_PROMPT = generar_contexto_sistema(DATOS_RAG)
 # 6. CONFIGURACIÓN CLIENTE API (OPENROUTER)
 # ---------------------------------------------------------
 BASE_URL = "https://openrouter.ai/api/v1"
-# Actualización del identificador del modelo para KIMI 2.5
-MODEL_NAME = "moonshotai/kimi-2.5"
+# Actualización del identificador del modelo a KIMI k2.5
+MODEL_NAME = "moonshotai/kimi-k2.5"
 
 # === SIDEBAR INTELIGENTE ===
 with st.sidebar:
@@ -1129,7 +1129,7 @@ if prompt := st.chat_input("Escribe tu consulta aquí..."):
                 messages=messages_api,
                 stream=True,
                 temperature=0.3,
-                max_tokens=350
+                max_tokens=1000 # Aumentado para permitir respuestas más completas
             )
 
             response_placeholder = st.empty()
@@ -1160,5 +1160,3 @@ if prompt := st.chat_input("Escribe tu consulta aquí..."):
 
         except Exception as e:
             st.error(f"Error en la comunicación con el modelo: {e}")
-
-
