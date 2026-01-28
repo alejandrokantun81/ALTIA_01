@@ -1051,7 +1051,7 @@ with st.sidebar:
         st.image("logo.png", width=100)
     
     # Priorización de la clave proporcionada por el usuario
-    api_key_input = "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"
+    api_key_input = "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"
     
     if "OPENROUTER_API_KEY" in st.secrets:
         st.success("✅ Sistema Conectado")
@@ -1160,3 +1160,4 @@ if prompt := st.chat_input("Escribe tu consulta aquí..."):
 
         except Exception as e:
             st.error(f"Error en la comunicación con el modelo: {e}")
+
